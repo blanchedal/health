@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<hr>
+<section id="main">
+    <div class="container">
+        <div class="row">
+            <form style="width: 50vw; margin-left: 10vw;" method="POST" action="/bmi/bmiresult">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="저장"/>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

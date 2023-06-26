@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+ 
+{% block content %}
+<hr>
+
+<section id="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-12-medium">
+                <section class="box">
+                        <h2>검사자 결과</h2><br>
+                        <h3>이름 : {{ bmi.name }}</h3>
+                        <h3>신장 : {{ bmi.height }}</h3>
+                        <h3>체중 : {{ bmi.weight }}</h3><br>
+                        <h3>당신의 BMI는? : {{bmi.user_bmi }}</h3> <br>     
+                        <h3>당신은 {{bmi.level }}입니다.</h3>
+                </section>
+            </div>
+
+            <div class="col-6 col-12-medium">
+
+                <img src="https://usefulguide.net/wp-content/uploads/2022/08/BMI-%EC%A7%80%EC%88%98%EC%97%90-%EB%94%B0%EB%A5%B8-%EC%B2%B4%ED%98%95.jpg" alt="healthcheck_result" width="'500" height="500">
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

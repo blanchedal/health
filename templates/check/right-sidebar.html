@@ -1,0 +1,296 @@
+<!DOCTYPE HTML>
+<!--
+	Dopetrope by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		{% load static %}
+		<title>Dopetrope by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+	</head>
+	<body class="right-sidebar is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<section id="header">
+
+					<!-- Logo -->
+						<h1><a href="#">자가건강 체크</a></h1>
+
+					<!-- Nav -->
+						<nav id="nav">
+							<ul>
+								<li><a href="/home">Home</a></li>
+								<li>
+									<!-- <a href="#">Dropdown</a> -->
+									<ul>
+										<li><a href="#">Lorem ipsum dolor</a></li>
+										<li><a href="#">Magna phasellus</a></li>
+										<li><a href="#">Etiam dolore nisl</a></li>
+										<li>
+											<a href="#">Phasellus consequat</a>
+											<ul>
+												<li><a href="#">Magna phasellus</a></li>
+												<li><a href="#">Etiam dolore nisl</a></li>
+												<li><a href="#">Veroeros feugiat</a></li>
+												<li><a href="#">Nisl sed aliquam</a></li>
+												<li><a href="#">Dolore adipiscing</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Veroeros feugiat</a></li>
+									</ul>
+								</li>
+								<li><a href="/search">Kcal info</a></li>
+								<li class="current"><a href="">Health Check</a></li>
+								<li><a href="/calend">My Calendar</a></li>
+							</ul>
+						</nav>
+
+				</section>
+
+			<!-- Main -->
+				<section id="main">
+					<div class="container">
+						<div class="row">
+							<div class="col-8 col-12-medium">
+
+								<!-- Content -->
+									<article class="box post">
+										<a href="#" class="image featured"><img src="{% static 'images/healthcheckbg.jpg' %}" alt="" /></a>
+										<section>
+										<header>
+											<h2>식품의약품 안전처 영양지수 프로그램</h2>
+										</section>
+										</header>
+										<h3>영양지수 정의</h3>
+											영양지수(NQ, Nutrition Quotient)는 개인이나 집단의 식사행동, 식사의 질과 영양상태 등을 종합적으로 평가하여 점수화한 지표입니다.
+										</p>
+										<p style="font-size: 15px;">영양지수 체크리스트는 다음의 3가지 영역으로 구성되어 있습니다.</style><br>
+										<strong>· 균형</strong> : 필요한 식품을 골고루 다양하게 먹는가<br>
+										<strong>· 절제</strong> : 건강에 좋지 않은 식품을 적게 먹는가<br>
+										<strong>· 실천</strong> : 건강하고 안전한 식행동을 실천하는가<br>
+										<br>
+										<h3>영양지수 프로그램</h3>
+										<p style="font-size: 15px;">영양지수 프로그램은 설문(※영양지수 체크리스트)에 응답하면(①), 영양지수가 자동 계산되고(②), 그 점수를 평가(양호/개선 필요/개선 시급)하여(③) 건강한 식생활 요령 등 맞춤형 가이드를 제공합니다.</p>
+										<span style="background: linear-gradient(to right, #c22043, #c22043); padding: 0.43em 1em; font-size: 14px; border-radius: 3px; color: #ffffff;">① 설문응답</span>
+										<span style="background: linear-gradient(to right, #c22043, #c22043); padding: 0.43em 1em; font-size: 14px; border-radius: 3px; color: #ffffff;">② 영양지수 자동계산</span>
+										<span style="background: linear-gradient(to right, #c22043, #c22043); padding: 0.43em 1em; font-size: 14px; border-radius: 3px; color: #ffffff;">③ 영양지수 평가</span>
+										<span style="background: linear-gradient(to right, #c22043, #c22043); padding: 0.43em 1em; font-size: 14px; border-radius: 3px; color: #ffffff;">④ 맞춤형 가이드</span>
+										<br><br>
+										<p style="font-size: 13px;">※ 영양지수 체크리스트: 연령별 식행동 특성 등을 고려하여 생애주기별*로 다른 설문 문항으로 구성</style>
+										<br>* 취학전 어린이(만3~5세), 학령기 어린이(만6~11세), 청소년(만12~18세), 성인(만19~64세), 노인(만65세 이상)
+										<input type="text" style="background-color:#FEEEE2; border-top: 1px dotted #c22043; border-bottom: 1px dotted #c22043; border-left: 1px dotted #c22043; border-right: 1px dotted #c22043; color: #c22043; font-size: 9pt; font-family:verdana" value="*출처 : 영양지수 프로그램, 식품의약품안전처(2021)" size=40>
+										<section>
+											<br>
+											<h3>프로그램 활용</h3>
+											영양지수 프로그램은 개인뿐만 아니라 보건소, 학교, 병원 등에서 영양·식생활 교육 및 상담 프로그램 등을 운영할 때 활용할 수 있습니다<br>
+											<br>
+											<h3>영양지수 평가결과</h3>
+											<p>설문(영양지수 체크리스트) 응답에 따라 나의 영양지수가 자동 계산되며, 결과지에 종합 점수와 영역별(균형, 절제, 실천) 점수가 제시됩니다. 상세내용은
+											<a href="/survey/nqex" onclick="window.open(this.href, '_blank', 'width=900, height=1913, toolbars=no, scrollbars=yes'); return false;">해당링크</a></li>
+											참고하세요.
+										</section>
+									</article>
+
+							</div>
+							<div class="col-4 col-12-medium">
+
+								<!-- Sidebar -->
+									<section class="box">
+                        			<div class="h-15 d-inline-block">
+                        			<header>
+                            			<h3>BMI(신체질량지수)</h3>
+                            			<br>
+                        			<a href="/bmi/checkbmi"><div style="border: 1px dotted; border-radius: 3px; padding: 4px;">BMI 알아보기</div></a>  
+                        			</header>
+                       				<p>지금 바로 나의 BMI를 알아볼까요?</p>
+                        			<a href="/bmi/createbmi"><div style="border: 1px dotted; border-radius: 3px; padding: 4px;">BMI 측정하기</div></a>  
+                    				</section>
+
+									<section class="box">
+										<header>
+											<h3>연령별 영양지수 </h3>
+										</header>
+										<p>지금 바로 나의 영양지수를 알아볼까요?</p>
+										<a href="/survey/preschool"><div style="border: 1px dotted; border-radius: 3px; padding: 4px;">취학 전 어린이(만 3~5세)</div></a>
+										<br>
+										<a href="/survey/child"><div style="border: 1px dotted; border-radius: 3px; padding: 4px;">학령기 어린이(만 6~11세)</div></a>
+										<br>
+										<a href="/survey/youth"><div style="border: 1px dotted; border-radius: 3px; padding: 4px;">청소년(만 12~18세)</div></a>
+										<br>
+										<a href="/survey/adult"><div style="border: 1px dotted; border-radius: 3px; padding: 4px;">성인(만 19~64세)</div></a>
+										<br>
+										<a href="/survey/oldman"><div style="border: 1px dotted; border-radius: 3px; padding: 4px;">노인(만 65세 이상)</div></a>
+									</section>
+									<!-- <section class="box">
+										<header>
+											<h3>Feugiat consequat</h3>
+										</header>
+										<p>Veroeros sed amet blandit consequat veroeros lorem blandit adipiscing et feugiat sed lorem consequat feugiat lorem dolore.</p>
+										<ul class="divided">
+											<li><a href="#">Sed et blandit consequat sed</a></li>
+											<li><a href="#">Hendrerit tortor vitae sapien dolore</a></li>
+											<li><a href="#">Sapien id suscipit magna sed felis</a></li>
+											<li><a href="#">Aptent taciti sociosqu ad litora</a></li>
+										</ul>
+										<footer>
+											<a href="#" class="button alt">Ipsum consequat</a>
+										</footer>
+									</section> -->
+
+							</div>
+						</div>
+					</div>
+				</section>
+
+			<!-- 230309 해당영역 미사용 주석 처리 : Footer -->
+				<!-- <section id="footer">
+					<div class="container">
+						<div class="row">
+							<div class="col-8 col-12-medium">
+								<section>
+									<header>
+										<h2>Blandit nisl adipiscing</h2>
+									</header>
+									<ul class="dates">
+										<li>
+											<span class="date">Jan <strong>27</strong></span>
+											<h3><a href="#">Lorem dolor sit amet veroeros</a></h3>
+											<p>Ipsum dolor sit amet veroeros consequat blandit ipsum phasellus lorem consequat etiam.</p>
+										</li>
+										<li>
+											<span class="date">Jan <strong>23</strong></span>
+											<h3><a href="#">Ipsum sed blandit nisl consequat</a></h3>
+											<p>Blandit phasellus lorem ipsum dolor tempor sapien tortor hendrerit adipiscing feugiat lorem.</p>
+										</li>
+										<li>
+											<span class="date">Jan <strong>15</strong></span>
+											<h3><a href="#">Magna tempus lorem feugiat</a></h3>
+											<p>Dolore consequat sed phasellus lorem sed etiam nullam dolor etiam sed amet sit consequat.</p>
+										</li>
+										<li>
+											<span class="date">Jan <strong>12</strong></span>
+											<h3><a href="#">Dolore tempus ipsum feugiat nulla</a></h3>
+											<p>Feugiat lorem dolor sed nullam tempus lorem ipsum dolor sit amet nullam consequat.</p>
+										</li>
+										<li>
+											<span class="date">Jan <strong>10</strong></span>
+											<h3><a href="#">Blandit tempus aliquam?</a></h3>
+											<p>Feugiat sed tempus blandit tempus adipiscing nisl lorem ipsum dolor sit amet dolore.</p>
+										</li>
+									</ul>
+								</section>
+							</div>
+							<div class="col-4 col-12-medium">
+								<section>
+									<header>
+										<h2>What's this all about?</h2>
+									</header>
+									<a href="#" class="image featured"><img src="images/pic10.jpg" alt="" /></a>
+									<p>
+										This is <strong>Dopetrope</strong> a free, fully responsive HTML5 site template by
+										<a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net/">HTML5 UP</a> It's released for free under
+										the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so feel free to use it for any personal or commercial project &ndash; just don't forget to credit us!
+									</p>
+									<footer>
+										<ul class="actions">
+											<li><a href="#" class="button">Find out more</a></li>
+										</ul>
+									</footer>
+								</section>
+							</div>
+							<div class="col-4 col-6-medium col-12-small">
+								<section>
+									<header>
+										<h2>Tempus consequat</h2>
+									</header>
+									<ul class="divided">
+										<li><a href="#">Lorem ipsum dolor sit amet sit veroeros</a></li>
+										<li><a href="#">Sed et blandit consequat sed tlorem blandit</a></li>
+										<li><a href="#">Adipiscing feugiat phasellus sed tempus</a></li>
+										<li><a href="#">Hendrerit tortor vitae mattis tempor sapien</a></li>
+										<li><a href="#">Sem feugiat sapien id suscipit magna felis nec</a></li>
+										<li><a href="#">Elit class aptent taciti sociosqu ad litora</a></li>
+									</ul>
+								</section>
+							</div>
+							<div class="col-4 col-6-medium col-12-small">
+								<section>
+									<header>
+										<h2>Ipsum et phasellus</h2>
+									</header>
+									<ul class="divided">
+										<li><a href="#">Lorem ipsum dolor sit amet sit veroeros</a></li>
+										<li><a href="#">Sed et blandit consequat sed tlorem blandit</a></li>
+										<li><a href="#">Adipiscing feugiat phasellus sed tempus</a></li>
+										<li><a href="#">Hendrerit tortor vitae mattis tempor sapien</a></li>
+										<li><a href="#">Sem feugiat sapien id suscipit magna felis nec</a></li>
+										<li><a href="#">Elit class aptent taciti sociosqu ad litora</a></li>
+									</ul>
+								</section>
+							</div>
+							<div class="col-4 col-12-medium">
+								<section>
+									<header>
+										<h2>Vitae tempor lorem</h2>
+									</header>
+									<ul class="social">
+										<li><a class="icon brands fa-facebook-f" href="#"><span class="label">Facebook</span></a></li>
+										<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a></li>
+										<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a></li>
+										<li><a class="icon brands fa-tumblr" href="#"><span class="label">Tumblr</span></a></li>
+										<li><a class="icon brands fa-linkedin-in" href="#"><span class="label">LinkedIn</span></a></li>
+									</ul>
+									<ul class="contact">
+										<li>
+											<h3>Address</h3>
+											<p>
+												Untitled Incorporated<br />
+												1234 Somewhere Road Suite<br />
+												Nashville, TN 00000-0000
+											</p>
+										</li>
+										<li>
+											<h3>Mail</h3>
+											<p><a href="#">someone@untitled.tld</a></p>
+										</li>
+										<li>
+											<h3>Phone</h3>
+											<p>(800) 000-0000</p>
+										</li>
+									</ul>
+								</section>
+							</div>
+							<div class="col-12"> -->
+
+								<!-- Copyright -->
+								<div id="copyright">
+									<ul class="links">
+									<li>&copy; Multicampus Data Convergence PJT(TEAM. KSOJ). All rights reserved.</li>
+									<li>Design Ref.: <a target="_blank" href="http://html5up.net">HTML5 UP</a></li>
+									<li><a class="icon brands fa-facebook-f" a target="_blank" href="https://www.facebook.com/multicampus.official"><span class="label">Facebook</span></a></li>
+									<li><a class="icon brands fa-youtube" a target="_blank" href="https://www.youtube.com/multicampus_official"><span class="label">Youtube</span></a>
+									<li><a class="icon brands fa-dribbble" a target="_blank" href="https://post.naver.com/my.nhn?memberNo=44851817"><span class="label">NaverPost</span></a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+
+		</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.dropotron.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

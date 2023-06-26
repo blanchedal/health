@@ -1,0 +1,334 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+{% load static %}
+<title>노인(만 65세 이상) 영양지수 체크리스트</title>
+<link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+<style type="text/css">
+.topnav > li:nth-child(2) .ubar{visibility:visible;opacity:1;}
+</style>
+<script type="text/javascript" src="{% static 'assets/js/common.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/js/jquery-latest.min.js' %}"></script>
+<script>
+var qstr = "c=c";
+var seq = 1;
+function send_data(){
+	seq = 1;
+	qstr = "c=c";
+	if(check_radio(document.foodform.fruit,'과일') === false) return;
+	if(check_radio(document.foodform.milk,'우유나 유제품') === false) return;
+	if(check_radio(document.foodform.fish,'생선이나 조개류') === false) return;
+	if(check_radio(document.foodform.egg,'달걀') === false) return;
+	if(check_radio(document.foodform.bean,'콩이나 두부') === false) return;
+
+	if(check_radio(document.foodform.nuts,'견과류') === false) return;
+	if(check_radio(document.foodform.grains,'전곡잡곡류') === false) return;
+	if(check_radio(document.foodform.water,'물') === false) return;
+	if(check_radio(document.foodform.sugar,'단맛이 있는 간식') === false) return;
+	if(check_radio(document.foodform.fat,'기름진 빵과자') === false) return;
+
+	if(check_radio(document.foodform.eatlife,'건강에 좋은 식생활') === false) return;
+	if(check_radio(document.foodform.foodlabel,'영양표시') === false) return;
+	if(check_radio(document.foodform.handwash,'손 씻기') === false) return;
+	if(check_radio(document.foodform.teeth,'씹기불편') === false) return;
+	if(check_radio(document.foodform.depressed,'우울함') === false) return;
+
+	if(check_radio(document.foodform.sleep,'숙면') === false) return;
+	if(check_radio(document.foodform.healthy,'건강자각도') === false) return;
+
+	if(check_radio(document.foodform.vegetable,'채소류 반찬') === false) return;
+	if(check_radio(document.foodform.spicy,'맵고 짠 국물음식') === false) return;
+	if(check_radio(document.foodform.exercise,'운동') === false) return;
+
+	if(check_radio(document.foodform.gender,'성별') === false) return;
+
+	if(document.foodform.age.value == ""){
+		alert("나이를 입력하셔야 합니다.");
+		document.foodform.age.focus();
+		return;
+	}
+	else{
+		var nage = parseInt(document.foodform.age.value);
+		if(nage == NaN){
+			alert("나이를 정확하게 입력해주세요.");
+			document.foodform.age.focus();
+			return;
+		}
+		if(nage < 65){
+			var alert_str = "'노인'에 해당하는 연령은 65세 이상입니다.\n"
+			+ "19 ~ 64세는 '성인 영양지수'을 선택하고 진행해주시기 바랍니다.";
+			alert(alert_str);
+			return;
+		}
+			
+	}
+	qstr += "&a1=" + document.foodform.age.value;
+
+	if(document.foodform.height.value == ""){
+		alert("신장을 입력하셔야 합니다.");
+		document.foodform.height.focus();
+		return;
+	}
+	qstr += "&a2=" + document.foodform.height.value;
+
+	if(document.foodform.weight.value == ""){
+		alert("몸무게를 입력하셔야 합니다.");
+		document.foodform.weight.focus();
+		return;
+	}
+	qstr += "&a3=" + document.foodform.weight.value;
+
+	document.location = "oldman_result.html?" + qstr;
+}
+function check_radio(dm, stitle){
+	var jud = -1;
+	for(var i = 0;i < dm.length;i++){
+		if(dm[i].checked === true){
+			jud = i;
+			break;
+		}
+	}
+	if(jud === -1){
+		alert("'"+stitle+"' 항목중 1개를 선택하셔야 합니다.");
+		dm[0].focus();
+		return false;
+	}
+
+	qstr += "&q"+seq+"=" + dm[jud].value;
+	seq++;
+
+	return true;
+}
+function onload_func(){
+	/*var alen = document.foodform.elements.length;
+	for(var i = 0;i < alen;i++){
+		if(document.foodform.elements[i].type == "radio"){
+			document.foodform.elements[i].checked = true;
+		}
+	}*/
+}
+</script>
+</head>
+
+<body onload="onload_func()">
+<script type="text/javascript" src="{% static 'assets/js/nav.js' %}"></script>
+
+<div class="subtitle"></div>
+
+<div class="survey_topimg2">
+	<p class="toptitle">영양지수 체크리스트<br class="br2"><span>(노인, 만 65세 이상)</span></p>
+	<p class="topsub">* 균형: 8문항, 절제: 2문항, 실천: 7문항으로 구성되어 있습니다.</p>
+</div>
+
+<div id="contents" class="contents">
+
+<div class="survey_info">
+<p><span>집과 집 밖(학교, 편의점, 음식점 등)</span>에서 먹은 식품을 <span>모두 포함</span>하여 답해 주시기 바랍니다.</p>
+<img src="{% static 'images/h_oldman.png' %}" alt="노인 캐릭터">
+</div>
+
+<form name="foodform">
+<div class="survey_area">
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n02"><p>1</p></div><p>귀하는 <span>과일</span>을 얼마나 자주 드십니까?</p></dt>
+	<dd><label><input type="radio" name="fruit" value="1"><p>① 2주일에 1번 이하<p></label></dd>
+	<dd><label><input type="radio" name="fruit" value="2"><p>② 일주일에 1~3번<p></label></dd>
+	<dd><label><input type="radio" name="fruit" value="3"><p>③ 일주일에 4~6번<p></label></dd>
+	<dd><label><input type="radio" name="fruit" value="4"><p>④ 하루에 1번<p></label></dd>
+	<dd><label><input type="radio" name="fruit" value="5"><p>⑤ 하루에 2번 이상<p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n03"><p>2</p></div><p>귀하는 <span>우유 또는 유제품(치즈, 요구르트 등)</span>을 얼마나 자주 드십니까?</p></dt>
+	<dd><label><input type="radio" name="milk" value="1"><p>① 2주일에 1번 이하</p></label></dd>
+	<dd><label><input type="radio" name="milk" value="2"><p>② 일주일에 1~3번</p></label></dd>
+	<dd><label><input type="radio" name="milk" value="3"><p>③ 일주일에 4~6번</p></label></dd>
+	<dd><label><input type="radio" name="milk" value="4"><p>④ 하루에 1번</p></label></dd>
+	<dd><label><input type="radio" name="milk" value="5"><p>⑤ 하루에 2번 이상</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n05"><p>3</p></div><p>귀하는 <span>생선이나 조개류(오징어, 굴, 새우 등 포함)</span>를 얼마나 자주 드십니까?</p></dt>
+	<dd><label><input type="radio" name="fish" value="1"><p>① 거의 먹지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="fish" value="2"><p>② 2주일에 1번</p></label></dd>
+	<dd><label><input type="radio" name="fish" value="3"><p>③ 일주일에 1~3번</p></label></dd>
+	<dd><label><input type="radio" name="fish" value="4"><p>④ 일주일에 4~6번</p></label></dd>
+	<dd><label><input type="radio" name="fish" value="5"><p>⑤ 하루에 1번 이상</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n06"><p>4</p></div><p>귀하는 <span>달걀(메추리알 등)</span>을 얼마나 자주 드십니까?</p></dt>
+	<dd><label><input type="radio" name="egg" value="1"><p>① 거의 먹지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="egg" value="2"><p>② 2주일에 1번</p></label></dd>
+	<dd><label><input type="radio" name="egg" value="3"><p>③ 일주일에 1~3번</p></label></dd>
+	<dd><label><input type="radio" name="egg" value="4"><p>④ 일주일에 4~6번</p></label></dd>
+	<dd><label><input type="radio" name="egg" value="5"><p>⑤ 하루에 1번 이상</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n07"><p>5</p></div><p>귀하는 <span>콩이나 두부(두유 포함)</span>를 얼마나 자주 드십니까?</p></dt>
+	<dd><label><input type="radio" name="bean" value="1"><p>① 2주일에 1번 이하</p></label></dd>
+	<dd><label><input type="radio" name="bean" value="2"><p>② 일주일에 1~3번</p></label></dd>
+	<dd><label><input type="radio" name="bean" value="3"><p>③ 일주일에 4~6번</p></label></dd>
+	<dd><label><input type="radio" name="bean" value="4"><p>④ 하루에 1번</p></label></dd>
+	<dd><label><input type="radio" name="bean" value="5"><p>⑤ 하루에 2번 이상</p></label></dd>
+</dl>
+
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n16"><p>6</p></div><p>귀하는 <span>견과류(호두, 잣, 아몬드 등)</span>를 얼마나 자주 드십니까?</p></dt>
+	<dd><label><input type="radio" name="nuts" value="1"><p>① 거의 먹지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="nuts" value="2"><p>② 2주일에 1번</p></label></dd>
+	<dd><label><input type="radio" name="nuts" value="3"><p>③ 일주일에 1~3번</p></label></dd>
+	<dd><label><input type="radio" name="nuts" value="4"><p>④ 일주일에 4~6번</p></label></dd>
+	<dd><label><input type="radio" name="nuts" value="5"><p>⑤ 하루에 1번 이상</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n22"><p>7</p></div><p>귀하는 <span>전곡이나 잡곡류(현미밥, 잡곡밥, 통밀빵 등)</span>를 얼마나 자주 드십니까?</p></dt>
+	<dd><label><input type="radio" name="grains" value="1"><p>① 거의 먹지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="grains" value="2"><p>② 일주일에 1~3번</p></label></dd>
+	<dd><label><input type="radio" name="grains" value="3"><p>③ 일주일에 4~6번</p></label></dd>
+	<dd><label><input type="radio" name="grains" value="4"><p>④ 하루에 1번</p></label></dd>
+	<dd><label><input type="radio" name="grains" value="5"><p>⑤ 하루에 2번 이상</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n27"><p>8</p></div><p>귀하는 하루에 <span>물</span>을 얼마나 자주 마십니까?</p></dt>
+	<dd><label><input type="radio" name="water" value="1"><p>① 거의 마시지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="water" value="2"><p>② 하루에 1~2잔</p></label></dd>
+	<dd><label><input type="radio" name="water" value="3"><p>③ 하루에 3~4잔</p></label></dd>
+	<dd><label><input type="radio" name="water" value="4"><p>④ 하루에 5~6잔</p></label></dd>
+	<dd><label><input type="radio" name="water" value="5"><p>⑤ 하루에 7~8잔 이상</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n08"><p>9</p></div><p>귀하는 <span>믹스커피, 가당음료, 강정, 사탕 등 설탕이 많이 들어있는 간식</span>을 얼마나 자주 드십니까?</p></dt>
+	<dd><label><input type="radio" name="sugar" value="1"><p>① 거의 먹지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="sugar" value="2"><p>② 일주일에 1~3번</p></label></dd>
+	<dd><label><input type="radio" name="sugar" value="3"><p>③ 일주일에 4~6번</p></label></dd>
+	<dd><label><input type="radio" name="sugar" value="4"><p>④ 하루에 1~2번</p></label></dd>
+	<dd><label><input type="radio" name="sugar" value="5"><p>⑤ 하루에 3번 이상</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n09"><p>10</p></div><p>귀하는 <span>기름진 빵(꽈배기, 생크림빵 등)이나 스낵 과자류(감자칩, 고구마칩 등)</span>를 얼마나 자주 드십니까?   </p></dt>
+	<dd><label><input type="radio" name="fat" value="1"><p>① 거의 먹지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="fat" value="2"><p>② 2주일에 1번</p></label></dd>
+	<dd><label><input type="radio" name="fat" value="3"><p>③ 일주일에 1~3번</p></label></dd>
+	<dd><label><input type="radio" name="fat" value="4"><p>④ 일주일에 4~6번</p></label></dd>
+	<dd><label><input type="radio" name="fat" value="5"><p>⑤ 하루에 1번 이상</p></label></dd>
+</dl>
+
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n07"><p>11</p></div><p>귀하는 평소에 <span>건강에 좋은 식생활</span>을 하려고 노력하십니까?</p></dt>
+	<dd><label><input type="radio" name="eatlife" value="1"><p>① 전혀 노력하지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="eatlife" value="2"><p>② 노력하지 않는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="eatlife" value="3"><p>③ 보통이다</p></label></dd>
+	<dd><label><input type="radio" name="eatlife" value="4"><p>④ 노력하는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="eatlife" value="5"><p>⑤ 매우 노력한다</p></label></dd>	
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n20"><p>12</p></div><p>귀하는 (가공)식품을 구입할 때 <span>유통기한이나 영양표시</span>를 확인하십니까?</p></dt>
+	<dd><label><input type="radio" name="foodlabel" value="1"><p>① 전혀 확인하지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="foodlabel" value="2"><p>② 확인하지 않는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="foodlabel" value="3"><p>③ 보통이다</p></label></dd>
+	<dd><label><input type="radio" name="foodlabel" value="4"><p>④ 확인하는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="foodlabel" value="5"><p>⑤ 항상 확인한다</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n13"><p>13</p></div><p>귀하는 음식을 <span>먹기 전에 손을</span> 씻으십니까?</p></dt>
+	<dd><label><input type="radio" name="handwash" value="1"><p>① 전혀 씻지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="handwash" value="2"><p>② 씻지 않는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="handwash" value="3"><p>③ 보통이다</p></label></dd>
+	<dd><label><input type="radio" name="handwash" value="4"><p>④ 씻는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="handwash" value="5"><p>⑤ 항상 씻는다</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n04"><p>14</p></div><p>귀하는 현재 치아나 틀니, 잇몸 등의 문제로 <span>음식을 씹는 것이 어느 정도 불편</span>하십니까? </p></dt>
+	<dd><label><input type="radio" name="teeth" value="1"><p>① 매우 불편하다</p></label></dd>
+	<dd><label><input type="radio" name="teeth" value="2"><p>② 불편한 편이다</p></label></dd>
+	<dd><label><input type="radio" name="teeth" value="3"><p>③ 그저 그렇다</p></label></dd>
+	<dd><label><input type="radio" name="teeth" value="4"><p>④ 별로 불편하지 않다</p></label></dd>
+	<dd><label><input type="radio" name="teeth" value="5"><p>⑤ 전혀 불편하지 않다</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n28"><p>15</p></div><p>귀하는 평소에 <span>우울함</span>을 어느 정도로 느끼십니까?</p></dt>
+	<dd><label><input type="radio" name="depressed" value="1"><p>① 항상 느낀다</p></label></dd>
+	<dd><label><input type="radio" name="depressed" value="2"><p>② 느끼는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="depressed" value="3"><p>③ 보통이다</p></label></dd>
+	<dd><label><input type="radio" name="depressed" value="4"><p>④ 느끼지 않는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="depressed" value="5"><p>⑤ 전혀 느끼지 않는다</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n29"><p>16</p></div><p>귀하는 <span>잠</span>을 잘 주무시는 편입니까? </p></dt>
+	<dd><label><input type="radio" name="sleep" value="1"><p>① 매우 못잔다</p></label></dd>
+	<dd><label><input type="radio" name="sleep" value="2"><p>② 못 자는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="sleep" value="3"><p>③ 보통이다</p></label></dd>
+	<dd><label><input type="radio" name="sleep" value="4"><p>④ 잘 자는 편이다</p></label></dd>
+	<dd><label><input type="radio" name="sleep" value="5"><p>⑤ 매우 잘 잔다</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n15"><p>17</p></div><p>귀하는 본인이 생각하기에 얼마나 <span>건강하다고 생각</span>하십니까?</p></dt>
+	<dd><label><input type="radio" name="healthy" value="1"><p>① 전혀 건강하지 않다</p></label></dd>
+	<dd><label><input type="radio" name="healthy" value="2"><p>② 건강하지 않은 편이다</p></label></dd>
+	<dd><label><input type="radio" name="healthy" value="3"><p>③ 보통이다</p></label></dd>
+	<dd><label><input type="radio" name="healthy" value="4"><p>④ 건강한 편이다</p></label></dd>
+	<dd><label><input type="radio" name="healthy" value="5"><p>⑤ 매우 건강하다</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n01"><p>18</p></div><p>귀하는 한 번 <span>식사할 때 김치를 제외한 채소류</span>를 몇 가지나 드십니까?   </p></dt>
+	<dd><label><input type="radio" name="vegetable" value="1"><p>① 거의 먹지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="vegetable" value="2"><p>② 1가지</p></label></dd>
+	<dd><label><input type="radio" name="vegetable" value="3"><p>③ 2가지</p></label></dd>
+	<dd><label><input type="radio" name="vegetable" value="4"><p>④ 3가지</p></label></dd>
+	<dd><label><input type="radio" name="vegetable" value="5"><p>⑤ 4가지 이상</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n23"><p>19</p></div><p>귀하는 맵고 짠 국물음식(<span>라면, 찌개류, 탕류, 국물 떡볶이 등</span>)을 얼마나 자주 드십니까?</p></dt>
+	<dd><label><input type="radio" name="spicy" value="1"><p>① 2주일에 1번 이하</p></label></dd>
+	<dd><label><input type="radio" name="spicy" value="2"><p>② 일주일에 1~3번</p></label></dd>
+	<dd><label><input type="radio" name="spicy" value="3"><p>③ 일주일에 4~6번</p></label></dd>
+	<dd><label><input type="radio" name="spicy" value="4"><p>④ 하루에 1번</p></label></dd>
+	<dd><label><input type="radio" name="spicy" value="5"><p>⑤ 하루에 2번 이상</p></label></dd>
+</dl>
+<dl class="survey_cont" role="radiogroup">
+	<dt><div class="num n15"><p>20</p></div><p>하루에 <span>30분 이상의 운동</span>을 얼마나 자주 하십니까?</p></dt>
+	<dd><label><input type="radio" name="exercise" value="1"><p>① 거의 하지 않는다</p></label></dd>
+	<dd><label><input type="radio" name="exercise" value="2"><p>② 일주일에 1~2번</p></label></dd>
+	<dd><label><input type="radio" name="exercise" value="3"><p>③ 일주일에 3~4번</p></label></dd>
+	<dd><label><input type="radio" name="exercise" value="4"><p>④ 일주일에 5~6번</p></label></dd>
+	<dd><label><input type="radio" name="exercise" value="5"><p>⑤ 매일</p></label></dd>
+</dl>
+<p class="exinfo">*18, 19, 20번은 참고용 문항</p>
+<div class="generaldet">
+<div class="gen_title"><p>일반사항</p></div>
+<dl class="gen_cont">
+	<dt>1. 성별은?</dt><dd><input type="radio" name="gender" value="남" id="gender_male" style="width:auto"> <label for="gender_male">남자</label>
+		<span class="nd">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nm"><br></span>
+		<input type="radio" name="gender" value="여" id="gender_famale" style="width:auto"> <label for="gender_famale">여자</label></dd>
+	<dt><label for="age">2. 만 나이는?</label></dt><dd>만 <input type="number" name="age" id="age">세</dd>
+	<dt><label for="height">3. 키는?</label></dt><dd><input type="number" name="height" id="height">cm</dd>
+	<dt><label for="weight">4. 몸무게는?</label></dt><dd><input type="number" name="weight" id="weight">kg</dd>
+</dl>
+</div>
+<p class="exinfo">※참고용 문항이란? 영양지수 평가문항에 포함되지 않으나, 영양교육이나 상담 시 참고할 수 있는 문항입니다.</p>
+<div class="resultsect">
+	<a href="/check" class="printbtn"><p>뒤로 가기</p></a>
+	<div id="printinfo" class="printinfosect">
+	</div>
+	<div id="blackback" class="blackback" onclick="closebtn();"></div>
+	<a href="javascript:send_data()" class="resultbtn"><p>　결과 보기</p></a>
+	</div>
+</div>
+</div>
+</form>
+
+
+</div>
+<div class="topbtn"><a href="javascript:window.scrollTo(0,0);"><img src="{% static 'images/top_btn.png' %}" alt="위로 가기 버튼" width="100" height="100"></a></div>
+<script> 
+(function(){
+	$(".topnav > li").bind("mouseenter focusin", function() {
+		$(this).addClass("on").siblings().removeClass("on");
+	});
+	$(".topnav > li").bind("mouseleave focusout", function() {
+		$(this).removeClass("on");
+	});
+})(); 
+</script>
+
+
+</body>
+</html>

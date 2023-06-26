@@ -1,0 +1,480 @@
+<html lang="ko" style="user-select: auto;">
+
+<head style="user-select: auto;">
+    {% load static %}
+    <title style="user-select: auto;">취학 전 어린이(만 3~5세) 영양지수 결과지</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css'}" style="user-select: auto;">
+    <script type="text/javascript" src="{% static 'assets/js/common.js' %}" style="user-select: auto;"></script>
+    <script type="text/javascript" src="{% static 'assets/js/jquery-latest.min.js' %}" style="user-select: auto;"></script>
+    <script src="{% static 'assets/js/nutri.js' %}" style="user-select: auto;"></script>
+    <script style="user-select: auto;">
+        var mainmenu = "preschool";
+
+        // 부족답 번호.
+        var area1shortage = [];
+        var area2shortage = [];
+        var area3shortage = [];
+
+        var balance_grade, restraint_grade, action_grade;
+
+        function onload_func() {
+            parse_qstring(document.defaultView.location.href);
+            set_mainGrade();
+
+            // 취학 전 어린이(만 3세 ~ 5세)
+            document.getElementById("fage").innerHTML = (param['a1'] != undefined) ? "만 " + param['a1'] + "세" : "";
+            var nage = parseInt(param['a1']);
+            var gender = (param['q16'] != undefined) ? decodeURIComponent(param['q16']) : "";
+            document.getElementById("fgender").innerHTML = gender;
+            document.getElementById("fheight").innerHTML = (param['a2'] != undefined) ? param['a2'] + "cm" : "";
+            var nheight = parseInt(param['a2']);
+            document.getElementById("fweight").innerHTML = (param['a3'] != undefined) ? param['a3'] + "kg" : "";
+            var nweight = parseInt(param['a3']);
+
+            var area1point = 0;
+            var vegetable = (param['q1'] != undefined) ? parseInt(param['q1']) : 0;		// 채소류
+            area1point += (vegetable - 1) * 0.121;
+            if (vegetable < 4) area1shortage.push("채소");
+
+            var fruit = (param['q2'] != undefined) ? parseInt(param['q2']) : 0;			// 과일
+            area1point += (fruit - 1) * 0.166;
+            if (fruit < 4) area1shortage.push("과일");
+
+            var milk = (param['q3'] != undefined) ? parseInt(param['q3']) : 0;			// 우유
+            area1point += (milk - 1) * 0.11;
+            if (milk < 5) area1shortage.push("우유");
+
+            var meat = (param['q4'] != undefined) ? parseInt(param['q4']) : 0;			// 육류
+            area1point += (meat - 1) * 0.101;
+            if (meat < 5) area1shortage.push("육류");
+
+            var fish = (param['q5'] != undefined) ? parseInt(param['q5']) : 0;			// 생선
+            area1point += (fish - 1) * 0.184;
+            if (fish < 4) area1shortage.push("생선");
+
+            var egg = (param['q6'] != undefined) ? parseInt(param['q6']) : 0;			// 달걀
+            area1point += (egg - 1) * 0.097;
+            if (egg < 5) area1shortage.push("달걀");
+
+            var bean = (param['q7'] != undefined) ? parseInt(param['q7']) : 0;			// 콩
+            area1point += (bean - 1) * 0.221;
+            if (bean < 4) area1shortage.push("콩");
+            var f1point = area1point * 100 / 4;
+
+            var area2point = 0;
+            var sugar = (param['q8'] != undefined) ? parseInt(param['q8']) : 0;			// 첨가당
+            area2point += (5 - sugar) * 0.18;
+            if (sugar > 2) area2shortage.push("첨가당");
+
+            var fat = (param['q9'] != undefined) ? parseInt(param['q9']) : 0;			// 기름진 음식
+            area2point += (5 - fat) * 0.306;
+            if (fat > 2) area2shortage.push("기름진 음식");
+
+            var fastfood = (param['q10'] != undefined) ? parseInt(param['q10']) : 0;	// 패스트 푸드
+            area2point += (5 - fastfood) * 0.248;
+            if (fastfood > 2) area2shortage.push("패스트푸드");
+
+            var prssmeat = (param['q11'] != undefined) ? parseInt(param['q11']) : 0;	// 가공육
+            area2point += (5 - prssmeat) * 0.266;
+            if (prssmeat > 2) area2shortage.push("가공육");
+            var f2point = area2point * 100 / 4;
+
+            var area3point = 0;
+            var breakfast = (param['q12'] != undefined) ? parseInt(param['q12']) : 0;	// 아침식사
+            area3point += (breakfast - 1) * 0.447;
+            if (breakfast < 5) area3shortage.push("아침식사");
+
+            var handwash = (param['q13'] != undefined) ? parseInt(param['q13']) : 0;	// 손씻기
+            area3point += (handwash - 1) * 0.179;
+            if (handwash < 4) area3shortage.push("손씻기");
+
+            var eatwith = (param['q14'] != undefined) ? parseInt(param['q14']) : 0;		// 돌아다니며 식사
+            area3point += (eatwith - 1) * 0.253;
+            if (eatwith > 2) area3shortage.push("식사 집중");
+
+            var exercise = (param['q15'] != undefined) ? parseInt(param['q15']) : 0;	// 운동
+            area3point += (exercise - 1) * 0.121;
+            if (exercise < 5) area3shortage.push("운동");
+            var f3point = area3point * 100 / 4;
+
+            // 영양지수
+            var nutri_quot = (f1point * 0.4 + f2point * 0.15 + f3point * 0.45).toFixed(1);	// 영역가중치
+
+            // 영양지수 점수 및 평가
+            var nutri_grade;
+            if (nutri_quot >= 67) nutri_grade = goodGrade;
+            else if (nutri_quot >= 52.4) nutri_grade = averageGrade;
+            else nutri_grade = badGrade;
+
+            document.getElementById('indextxt').innerHTML = "<b>" + nutri_quot + "</font>점: <font color='" + nutri_grade.backcol + "'>" + nutri_grade.stitle + "(" + nutri_grade.kname + ")</font></b>";
+            document.getElementById('fgraph').style.width = nutri_quot + "%";
+            document.getElementById('fgraph').style.background = "#832f21";
+
+            document.getElementById('fgraph_p').innerHTML = nutri_quot + "점(" + nutri_grade.kname + ")";
+            //document.getElementById('nutri_quot2').innerText = nutri_quot;
+
+            //document.getElementById('nutri_result2').innerText = "식생활" + nutri_grade.stitle;
+            document.getElementById('nutri_advice2').innerHTML = nutri_grade.advice2HTML;
+
+
+            // 영역별 점수 및 평가(상단 그래프)
+            // 균형
+            var balance_quot = f1point.toFixed(1);
+            if (balance_quot >= 60.7) balance_grade = goodGrade;
+            else if (balance_quot >= 40.9) balance_grade = averageGrade;
+            else balance_grade = badGrade;
+
+            document.getElementById('nutri_balance1').innerHTML = get_area1bar(balance_quot, balance_grade);
+            console.log("균형 : " + balance_quot + "(" + balance_grade.kname + ")");
+
+            // 절제
+            var restraint_quot = f2point.toFixed(1);
+            if (restraint_quot >= 75) restraint_grade = goodGrade;
+            else if (restraint_quot >= 50) restraint_grade = averageGrade;
+            else restraint_grade = badGrade;
+
+            document.getElementById('nutri_restraint1').innerHTML = get_area1bar(restraint_quot, restraint_grade);
+
+            // 실천
+            var action_quot = f3point.toFixed(1);
+            if (action_quot >= 78) action_grade = goodGrade;
+            else if (action_quot >= 55.9) action_grade = averageGrade;
+            else action_grade = badGrade;
+
+            document.getElementById('nutri_action1').innerHTML = get_area1bar(action_quot, action_grade);
+
+            // 영역별 점수 및 평가(중간 표)
+            document.getElementById('balance_stitle').innerText = balance_grade.stitle + "\n(" + balance_quot + ")";
+            document.getElementById('balance_desc').innerHTML = get_balanceHTML(balance_grade.kname);
+            document.getElementById('balance_descm').innerHTML = get_balanceHTML(balance_grade.kname);
+
+            document.getElementById('restraint_stitle').innerText = restraint_grade.stitle + "\n(" + restraint_quot + ")";
+            document.getElementById('restraint_desc').innerHTML = get_restraintHTML(restraint_grade.kname);
+            document.getElementById('restraint_descm').innerHTML = get_restraintHTML(restraint_grade.kname);
+
+            document.getElementById('action_stitle').innerText = action_grade.stitle + "\n(" + action_quot + ")";
+            document.getElementById('action_desc').innerHTML = get_actionHTML(action_grade.kname);
+            document.getElementById('action_descm').innerHTML = get_actionHTML(action_grade.kname);
+
+            document.getElementById('score_quot').innerHTML = "<b>- 균형 " + balance_quot + "점: <font color='" + balance_grade.backcol + "'>" + balance_grade.stitle + "(" + balance_grade.kname + ")</font><br>- 절제 " + restraint_quot + "점: <font color='" + restraint_grade.backcol + "'>" + restraint_grade.stitle + "(" + restraint_grade.kname + ")</font><br>- 실천 " + action_quot + "점: <font color='" + action_grade.backcol + "'>" + action_grade.stitle + "(" + action_grade.kname + ")</font></b>";
+            //document.getElementById('score_stitle').innerHTML = "*균형 : <font color='"+balance_grade.backcol+"'>" + balance_grade.stitle + "</font> / 절제 : <font color='"+restraint_grade.backcol+"'>" + restraint_grade.stitle + "</font> / 실천 : <font color='"+action_grade.backcol+"'>" + action_grade.stitle + "</font> 입니다.";
+
+            // 비만도(BMI)
+            var bmi = nweight / (nheight * nheight * 0.0001);
+            //alert(bmi);
+
+            // 비만여부 판정
+            var bmi_grade = get_bmiJudge(bmi, nage, gender);
+            document.getElementById('fjudge').innerHTML = bmi_grade;
+
+            // 배경 점수 표시
+            var num01 = "52.4";
+            var num02 = "67.0";
+            var num11 = "40.8";
+            var num12 = "60.7";
+            var num21 = "49.9";
+            var num22 = "75.0";
+            var num31 = "55.8";
+            var num32 = "78.0";
+
+            document.getElementById('total1').style.left = "calc(" + num01 + "% - 30px)";
+            document.getElementById('total2').style.left = "calc(" + num02 + "% - 30px)";
+            document.getElementById('balance1').style.left = "calc(" + num11 + "% - 30px)";
+            document.getElementById('balance2').style.left = "calc(" + num12 + "% - 30px)";
+            document.getElementById('restraint1').style.left = "calc(" + num21 + "% - 30px)";
+            document.getElementById('restraint2').style.left = "calc(" + num22 + "% - 30px)";
+            document.getElementById('action1').style.left = "calc(" + num31 + "% - 30px)";
+            document.getElementById('action2').style.left = "calc(" + num32 + "% - 30px)";
+
+            document.getElementById('total1').innerHTML = num01;
+            document.getElementById('total2').innerHTML = num02;
+            document.getElementById('balance1').innerHTML = num11;
+            document.getElementById('balance2').innerHTML = num12;
+            document.getElementById('restraint1').innerHTML = num21;
+            document.getElementById('restraint2').innerHTML = num22;
+            document.getElementById('action1').innerHTML = num31;
+            document.getElementById('action2').innerHTML = num32;
+
+            make_tpraph(num11, num12, balance_quot, num21, num22, restraint_quot, num31, num32, action_quot);
+        }
+    </script>
+</head>
+
+<body onload="onload_func()" style="user-select: auto;">
+    <div class="subtitle" style="user-select: auto;"></div>
+
+    <div class="survey_topimg" style="user-select: auto;">
+        <p style="user-select: auto;"><span style="user-select: auto;">취학 전 어린이<br class="br"
+                    style="user-select: auto;">(만 3~5세)</span> <br class="br2" style="user-select: auto;">영양지수 <br
+                class="br" style="user-select: auto;">결과지</p>
+    </div>
+
+    <div id="contents" class="contents" style="user-select: auto;">
+
+        <div class="result_info" style="user-select: auto;">
+            <p style="user-select: auto;">영양지수 평가 결과를 참고하여 식생활을 개선해 보세요.</p>
+        </div>
+        <div class="result_general" style="user-select: auto;">
+            <div class="title" style="user-select: auto;">
+                <p style="user-select: auto;">일반 사항</p>
+            </div>
+            <div class="cont" style="user-select: auto;">
+                <ul style="user-select: auto;">
+                    <li style="user-select: auto;"><b style="user-select: auto;">나이</b> : <span id="fage"
+                            style="user-select: auto;">만 3세</span></li>
+                    <li style="user-select: auto;"><b style="user-select: auto;">성별</b> : <span id="fgender"
+                            style="user-select: auto;">남</span></li>
+                    <li style="user-select: auto;"><b style="user-select: auto;">키</b> : <span id="fheight"
+                            style="user-select: auto;">45cm</span></li>
+                    <li style="user-select: auto;"><b style="user-select: auto;">체중</b> : <span id="fweight"
+                            style="user-select: auto;">15kg</span></li>
+                    <li style="user-select: auto;"><b style="user-select: auto;">비만도</b> : <span id="fjudge"
+                            style="user-select: auto;">비만</span></li>
+                </ul>
+            </div>
+        </div>
+        </section>
+
+        <div class="result_index" style="user-select: auto;">
+            <div class="title" style="user-select: auto;">
+                <p style="user-select: auto;">종합 점수</p>
+            </div>
+            <div class="cont" style="user-select: auto;">
+                <div class="indexsect" style="user-select: auto;">
+                    <div id="indextxt" class="indextxt" style="user-select: auto;"><b>35.2점: <font color="#DA2416">개선
+                                시급(하)</font></b></div>
+                </div>
+                <div class="result_area" style="margin-top: 10px; user-select: auto;">
+                    <div class="areagraphsect" style="user-select: auto;">
+                        <div class="areagraph" style="user-select: auto;">
+                            <div class="areatitle" style="user-select: auto;">종합 점수</div>
+                            <div class="areagrbar t1" style="user-select: auto;">
+                                <div id="fgraph" class="bar"
+                                    style="user-select: auto; width: 35.2%; background: rgb(131, 47, 33);">
+                                    <p id="fgraph_p" style="user-select: auto;">35.2점(하)</p>
+                                </div>
+                            </div>
+                            <div class="nutri_num" style="user-select: auto;">
+                                <span id="total1" style="user-select: auto; left: calc(52.4% - 30px);">52.4</span>
+                                <span id="total2" style="user-select: auto; left: calc(67% - 30px);">67.0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="info2" style="user-select: auto;">* 하(&lt;52.4), 중(52.4 ≤ ~ &lt; 67.0), 상(67.0 ≤)</span>
+
+
+            </div>
+        </div>
+
+        <div class="result_area" style="user-select: auto;">
+            <div class="title" style="user-select: auto;">
+                <p style="user-select: auto;">영역별 점수</p>
+            </div>
+            <div class="cont" style="user-select: auto;">
+                <div class="areasect" style="user-select: auto;">
+                    <div class="areatxt" style="user-select: auto;">
+                        <p id="score_quot" style="user-select: auto;"><b>- 균형 22.1점: <font color="#DA2416">개선 시급(하)
+                                </font><br>- 절제 100.0점: <font color="#39A619">양호(상)</font><br>- 실천 25.3점: <font
+                                    color="#DA2416">개선 시급(하)</font></b></p>
+                    </div>
+                    <div class="areagraphsect" style="user-select: auto;">
+                        <div class="areagraph" style="user-select: auto;">
+                            <div class="areatitle" style="user-select: auto;">균형</div>
+                            <div id="nutri_balance1" class="areagrbar n1" style="user-select: auto;">
+                                <div class="bar" style="width:22.1%;background-color:#832f21;"><span>22.1점(하)</span>
+                                </div>
+                            </div>
+                            <div class="nutri_num" style="user-select: auto;">
+                                <span id="balance1" style="user-select: auto; left: calc(40.8% - 30px);">40.8</span>
+                                <span id="balance2" style="user-select: auto; left: calc(60.7% - 30px);">60.7</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="areagraphsect" style="user-select: auto;">
+                        <div class="areagraph" style="user-select: auto;">
+                            <div class="areatitle" style="user-select: auto;">절제</div>
+                            <div id="nutri_restraint1" class="areagrbar n2" style="user-select: auto;">
+                                <div class="bar" style="width:100.0%;background-color:#832f21;"><span>100.0점(상)</span>
+                                </div>
+                            </div>
+                            <div class="nutri_num" style="user-select: auto;">
+                                <span id="restraint1" style="user-select: auto; left: calc(49.9% - 30px);">49.9</span>
+                                <span id="restraint2" style="user-select: auto; left: calc(75% - 30px);">75.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="areagraphsect" style="user-select: auto;">
+                        <div class="areagraph" style="user-select: auto;">
+                            <div class="areatitle" style="user-select: auto;">실천</div>
+                            <div id="nutri_action1" class="areagrbar n3" style="user-select: auto;">
+                                <div class="bar" style="width:25.3%;background-color:#832f21;"><span>25.3점(하)</span>
+                                </div>
+                            </div>
+                            <div class="nutri_num" style="user-select: auto;">
+                                <span id="action1" style="user-select: auto; left: calc(55.8% - 30px);">55.8</span>
+                                <span id="action2" style="user-select: auto; left: calc(78% - 30px);">78.0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--<span class="info2">*영역별 평가 기준: 같은 연령대의 사람들과 비교하여 점수가 75~100% 이면, <font color="green">‘양호’</font>. 25~74.9%이면 <font color="EB660A">‘개선 필요’</font>, 0~24.9%이면 <font color="red">‘개선 시급’</font>으로 표시합니다.</span>-->
+                </div>
+            </div>
+        </div>
+
+        <div class="result_pattern" style="user-select: auto;">
+            <div class="title" style="user-select: auto;">
+                <p style="user-select: auto;">영역별 점수 패턴</p>
+            </div>
+            <div class="cont" style="user-select: auto;">
+                <div class="trigrapesect" style="user-select: auto;">
+                    <svg width="100%" viewBox="0 0 500 406" id="tgraph" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                        xmlns:xlink="http://www.w3.org/1999/xlink" style="user-select: auto;">
+                        <g id="tgraph_back" style="user-select: auto;">
+                            <polygon points="248,28 41,375 457,375" stroke="none" fill="#eeffe6"></polygon>
+                            <polygon points="248,120.74799999999999 92.75,347.25 411.02,350.58" stroke="none"
+                                fill="#fff2e6"></polygon>
+                            <polygon points="248,167.712 144.707,319.389 364.62199999999996,325.938" stroke="none"
+                                fill="#ffe6e6"></polygon>
+                        </g>
+                        <text x="248" y="20" fill="#000000" text-anchor="middle" font-size="13"
+                            style="user-select: auto;">균형</text>
+                        <text x="25" y="375" fill="#000000" text-anchor="middle" font-size="13"
+                            style="user-select: auto;">절제</text>
+                        <text x="470" y="375" fill="#000000" text-anchor="middle" font-size="13"
+                            style="user-select: auto;">실천</text>
+                        <line x1="248" y1="28" x2="248" y2="264" stroke-width="1" stroke="#cccccc"
+                            style="user-select: auto;"></line>
+                        <line x1="41" y1="375" x2="248" y2="264" stroke-width="1" stroke="#cccccc"
+                            style="user-select: auto;"></line>
+                        <line x1="457" y1="375" x2="248" y2="264" stroke-width="1" stroke="#cccccc"
+                            style="user-select: auto;"></line>
+                        <line x1="246" y1="28" x2="250" y2="28" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="246" y1="51.6" x2="250" y2="51.6" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="246" y1="75.2" x2="250" y2="75.2" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="246" y1="98.80000000000001" x2="250" y2="98.80000000000001" stroke-width="1"
+                            stroke="#cccccc"></line>
+                        <line x1="246" y1="122.4" x2="250" y2="122.4" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="246" y1="146" x2="250" y2="146" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="246" y1="169.60000000000002" x2="250" y2="169.60000000000002" stroke-width="1"
+                            stroke="#cccccc"></line>
+                        <line x1="246" y1="193.20000000000002" x2="250" y2="193.20000000000002" stroke-width="1"
+                            stroke="#cccccc"></line>
+                        <line x1="246" y1="216.8" x2="250" y2="216.8" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="246" y1="240.4" x2="250" y2="240.4" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="39.5" y1="373.5" x2="42.5" y2="376.5" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="60.2" y1="362.4" x2="63.2" y2="365.4" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="80.9" y1="351.3" x2="83.9" y2="354.3" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="101.6" y1="340.2" x2="104.6" y2="343.2" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="122.3" y1="329.1" x2="125.3" y2="332.1" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="143" y1="318" x2="146" y2="321" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="163.7" y1="306.9" x2="166.7" y2="309.9" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="184.4" y1="295.8" x2="187.4" y2="298.8" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="205.1" y1="284.7" x2="208.1" y2="287.7" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="225.79999999999998" y1="273.6" x2="228.79999999999998" y2="276.6" stroke-width="1"
+                            stroke="#cccccc"></line>
+                        <line x1="458.5" y1="373.5" x2="455.5" y2="376.5" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="437.6" y1="362.4" x2="434.6" y2="365.4" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="416.7" y1="351.3" x2="413.7" y2="354.3" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="395.8" y1="340.2" x2="392.8" y2="343.2" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="374.9" y1="329.1" x2="371.9" y2="332.1" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="354" y1="318" x2="351" y2="321" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="333.1" y1="306.9" x2="330.1" y2="309.9" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="312.20000000000005" y1="295.8" x2="309.20000000000005" y2="298.8" stroke-width="1"
+                            stroke="#cccccc"></line>
+                        <line x1="291.3" y1="284.7" x2="288.3" y2="287.7" stroke-width="1" stroke="#cccccc"></line>
+                        <line x1="270.4" y1="273.6" x2="267.4" y2="276.6" stroke-width="1" stroke="#cccccc"></line>
+                        <polygon points="248,211.844 41,375 300.877,292.083" stroke="#444444" stroke-width="2"
+                            stroke-dasharray="5" fill="none"></polygon>
+                        <circle fill="#DA2416" cx="248" cy="211.844" r="5"></circle>
+                        <circle fill="#39A619" cx="41" cy="375" r="5"></circle>
+                        <circle fill="#DA2416" cx="300.877" cy="292.083" r="5"></circle>
+                    </svg>
+                </div>
+                <div id="nutri_advice2" class="triadvice" style="user-select: auto;">
+                    <p>현재 전반적으로 식사 섭취 및 식행동이 <font color="#DA2416">불량</font>한 수준입니다.</p>
+                    <p>각 영역별 점수가 모두 높아질 수 있도록 “<a href="https://various.foodsafetykorea.go.kr/nq/preschool_data.html"
+                            target="_blank">자료실</a>”에서 자료를 참고하세요!</p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 판정결과 Desktop -->
+        <div class="tablesect" style="user-select: auto;">
+            <table class="ret" style="user-select: auto;">
+                <caption style="user-select: auto;">영양지수 평가결과의 상세 내용은 다음과 같습니다.</caption>
+                <thead style="user-select: auto;">
+                    <tr style="user-select: auto;">
+                        <th width="110" style="user-select: auto;">영역</th>
+                        <th width="170" style="user-select: auto;">판정결과</th>
+                        <th colspan="2" style="user-select: auto;">영역별 권고 사항</th>
+                    </tr>
+                </thead>
+                <tbody style="user-select: auto;">
+                    <tr style="user-select: auto;">
+                        <td valign="middle" style="user-select: auto;"><b style="user-select: auto;">균형</b></td>
+                        <td id="balance_stitle" valign="middle" style="user-select: auto;">개선 시급<br>(22.1)</td>
+                        <td id="balance_desc" valign="middle" style="user-select: auto;">
+                            <p><span style="color:red;">'채소, 과일, 우유, 육류, 생선, 달걀'</span> 섭취를 늘리세요!</p>
+                            <p class="resub">- 다양한 식품 골고루 섭취하기</p>
+                            <p class="resub">- 매끼니 1~2 종류 이상 단백질 식품(육류, 생선, 달걀, 콩류) 섭취하기</p>
+                            <p class="resub">- 채소 반찬 3종류 이상 섭취하기</p>
+                            <p class="resub">- 간식으로 과일은 1번 이상, 흰 우유는 2잔 이상 섭취하기(흰 우유 한잔은 플레인 요구르트, 치즈로 대체 가능)</p>
+                        </td>
+                        <td style="user-select: auto;"><img src="{% static 'images/pre_rimg1.jpg' %}"
+                                alt="식품구성자전거로 균형된 식사를 해요! 여러가지 식품을 골고루 먹기"
+                                onclick="window.open('./images/pre_rimg1.jpg','pop','width=1000,height=564');"
+                                style="cursor: pointer; user-select: auto;"></td>
+                    </tr>
+                    <tr style="user-select: auto;">
+                        <td valign="middle" style="user-select: auto;"><b style="user-select: auto;">절제</b></td>
+                        <td id="restraint_stitle" valign="middle" style="user-select: auto;">양호<br>(100.0)</td>
+                        <td id="restraint_desc" valign="middle" style="user-select: auto;">
+                            <p>당, 지방, 나트륨이 많이 든 음식을 절제하는 현재의 식습관을 잘 유지하세요!</p>
+                        </td>
+                        <td style="user-select: auto;"><img src="{% static 'images/pre_rimg2.jpg' %}"
+                                alt="절제편 이것만은 꼭! 단 음식 적게 먹기. 패스트푸드, 가공육 적게 먹기"
+                                onclick="window.open('./images/pre_rimg2.jpg','pop','width=1000,height=564');"
+                                style="cursor: pointer; user-select: auto;"></td>
+                    </tr>
+                    <tr style="user-select: auto;">
+                        <td valign="middle" style="user-select: auto;"><b style="user-select: auto;">실천</b></td>
+                        <td id="action_stitle" valign="middle" style="user-select: auto;">개선 시급<br>(25.3)</td>
+                        <td id="action_desc" valign="middle" style="user-select: auto;">
+                            <p><span style="color:red;">'아침식사, 손씻기, 식사 집중, 운동'</span> 항목을 개선하세요!</p>
+                            <p class="resub">- 매일 아침식사하기</p>
+                            <p class="resub">- 식사 중 돌아다니지 않기</p>
+                            <p class="resub">- 손 자주 씻기</p>
+                            <p class="resub">- 규칙적으로 운동하기</p>
+                        </td>
+                        <td style="user-select: auto;"><img src="{% static 'images/pre_rimg3.jpg' %}"
+                                alt="실천편 이것만은 꼭! 아침식사 꼭 하기. 손 잘 씻기. 잘 뛰어 놀기"
+                                onclick="window.open('./images/pre_rimg3.jpg','pop','width=1000,height=564');"
+                                style="cursor: pointer; user-select: auto;"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="strbtn" style="user-select: auto;"><a href="right-sidebar.html" style="user-select: auto;">
+                <p style="user-select: auto;">나의 영양지수 다시 검사하기</p>
+            </a></div>
+    </div>
+    <div class="topbtn"><a href="javascript:window.scrollTo(0,0);"><img src="{% static 'images/top_btn.png' %}" alt="위로 가기 버튼"
+                width="100" height="100"></a></div>
+
+    <script style="user-select: auto;">
+        (function () {
+            $(".topnav > li").bind("mouseenter focusin", function () {
+                $(this).addClass("on").siblings().removeClass("on");
+            });
+            $(".topnav > li").bind("mouseleave focusout", function () {
+                $(this).removeClass("on");
+            });
+        })(); 
+    </script>
+
+
+</body>
+
+</html>

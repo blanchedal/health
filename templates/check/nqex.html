@@ -1,0 +1,484 @@
+<html>
+
+<head>
+    {% load static %}
+    <title>Document</title>
+</head>
+
+<body>
+    <title>영양지수(NQ)란?</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+    <style type="text/css">
+        .topnav>li:nth-child(1) .ubar {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /*#aasect{display:none;}*/
+        #aa {
+            display: inline-block;
+            padding: 3px 8px;
+            font-size: 1.4rem;
+            text-align: center;
+            width: 77px;
+            font-weight: normal;
+            border-radius: 3px;
+        }
+    </style>
+    <style type="text/css">
+        #aa {
+            background-color: #0c3561;
+            color: #fff;
+        }
+
+        #aasect {
+            display: none;
+        }
+
+        .result_area .t1 {
+            background-size: 52.4% 100px, 14.5% 100px, 33.1% 100px;
+            background-position: 0 0, 61.3% 0, 100% 0;
+        }
+
+        .result_area .n1 {
+            background-size: 40.8% 100px, 19.8% 100px, 39.4% 100px;
+            background-position: 0 0, 50.9% 0, 100% 0;
+        }
+
+        .result_area .n2 {
+            background-size: 49.9% 100px, 25% 100px, 25.1% 100px;
+            background-position: 0 0, 66.6% 0, 100% 0;
+        }
+
+        .result_area .n3 {
+            background-size: 55.8% 100px, 22.1% 100px, 22.1% 100px;
+            background-position: 0 0, 71.7% 0, 100% 0;
+        }
+
+        .result_index,
+        .result_area {
+            transform: scale(0.9);
+        }
+
+        .sampleinfo {
+            width: calc(100% - 100px);
+            max-width: calc(1200px - 100px);
+            padding: 50px;
+            border: 1px solid #e4e4e4;
+        }
+
+        @media(max-width:419px) {
+            .result_area .t1 {
+                background-size: 52.4% 50px, 14.5% 50px, 33.1% 50px;
+                background-position: 0 0, 61.3% 0, 100% 0;
+            }
+
+            .result_area .n1 {
+                background-size: 40.8% 50px, 19.8% 50px, 39.4% 50px;
+                background-position: 0 0, 50.9% 0, 100% 0;
+            }
+
+            .result_area .n2 {
+                background-size: 49.9% 50px, 25% 50px, 25.1% 50px;
+                background-position: 0 0, 66.6% 0, 100% 0;
+            }
+
+            .result_area .n3 {
+                background-size: 55.8% 50px, 22.1% 50px, 22.1% 50px;
+                background-position: 0 0, 71.7% 0, 100% 0;
+            }
+
+            .result_index,
+            .result_area {
+                transform: scale(1);
+            }
+
+            .sampleinfo {
+                width: calc(100% - 60px);
+                padding: 30px;
+            }
+
+            #aa {
+                display: block;
+                padding: 3px 8px;
+                font-size: 1.6rem;
+                text-align: center;
+                width: calc(100% - 40px);
+                margin-top: 10px;
+            }
+        }
+    </style>
+    <script type="text/javascript" src="{% static 'assets/js/common.js' %}"></script>
+    <script type="text/javascript" src="{% static 'assets/js/jquery-latest.min.js' %}"></script>
+    <script>
+        function aainfopen() {
+            if (document.getElementById("aasect").style.display === "table") {
+                document.getElementById("aasect").style.display = "none";
+                document.getElementById("aa").innerHTML = "보기 ▼";
+            } else {
+                document.getElementById("aasect").style.display = "table";
+                document.getElementById("aa").innerHTML = "감추기 ▲";
+            }
+        }
+    </script>
+    </head>
+
+    <body>
+        <script type="text/javascript"></script>
+
+        <div class="subtitle"></div>
+
+        <div id="contents" class="contents">
+            <h1 class="nqtitle">
+                <p>영양지수 평가</p>
+            </h1>
+            <div class="nqcont">
+                <p class="title">영양지수 평가</p>
+                <p class="cont" style="background-position:15px 18px;">영양지수 점수를 <b>영양지수 기준 점수(값)</b><sup>*</sup>과 비교하여
+                    <font color="#39A619">양호(상)</font>, <font color="#EB660A">개선 필요(중)</font>, 또는 <font color="#DA2416">
+                        개선 시급(하)</font>로 평가합니다.</p>
+                <p class="cont2">* <b>영양지수 기준 점수(값)</b></p>
+                <p class="cont2" style="padding:0 0 0 30px;">연령별로 영양지수 상위 25% 및 하위 25%에 해당되는 사람의 점수</p>
+                <p class="cont2" style="padding:0 0 0 45px;text-indent:-14px;">※ 현재 우리 국민의(연령별) 영양지수 수준이 반영된 값(식약처
+                    조사연구사업, `21)으로 소비트렌드 및 식생활 변화 등에 따라 주기적 실태조사를 통해 변경될 수 있음.</p>
+            </div>
+
+            <div class="nqcont">
+                <p class="title">&lt;예시: 취학 전 어린이&gt;</p>
+            </div>
+            <div class="sampleinfo">
+                <div class="result_index" style="margin-top:0;">
+                    <div class="title">
+                        <p>종합 점수</p>
+                    </div>
+                    <div class="cont">
+                        <div class="indexsect">
+                            <div id="indextxt" class="indextxt"><b>64.2점: <font color="#EB660A">개선 필요(중)</font></b>
+                            </div>
+                        </div>
+                        <div class="result_area" style="margin-top:10px;transform:scale(1);">
+                            <div class="areagraphsect">
+                                <div class="areagraph">
+                                    <div class="areatitle">종합 점수</div>
+                                    <div class="areagrbar t1">
+                                        <div id="fgraph" class="bar" style="width: 64.2%; background:#832f21;">
+                                            <p id="fgraph_p">64.2점(중)</p>
+                                        </div>
+                                    </div>
+                                    <div class="nutri_num">
+                                        <span id="total1" style="left: calc(52.4% - 30px);">52.4</span>
+                                        <span id="total2" style="left: calc(67.0% - 30px);">67.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <span class="info2">* 하(<52.4), 중(52.4 ≤ ~ < 67.0), 상(67.0 ≤)</span>
+
+
+                    </div>
+                </div>
+                <div class="result_area">
+                    <div class="title">
+                        <p>영역별 점수</p>
+                    </div>
+                    <div class="cont">
+                        <div class="areasect">
+                            <div class="areatxt">
+                                <p id="score_quot"><b></b>- 균형 57.8점: <font color="#EB660A">개선 필요(중)</font><br>- 절제
+                                    30.8점: <font color="#DA2416">개선 시급(하)</font><br>- 실천 81.0점: <font color="#39A619">
+                                        양호(상)</font></b></p>
+                            </div>
+                            <div class="areagraphsect">
+                                <div class="areagraph">
+                                    <div class="areatitle">균형</div>
+                                    <div id="nutri_balance1" class="areagrbar n1">
+                                        <div class="bar" style="width:57.8%;background-color:#832f21;">
+                                            <span>57.8점(중)</span></div>
+                                    </div>
+                                    <div class="nutri_num">
+                                        <span id="balance1" style="left: calc(40.8% - 30px);">40.8</span>
+                                        <span id="balance2" style="left: calc(60.7% - 30px);">60.7</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="areagraphsect">
+                                <div class="areagraph">
+                                    <div class="areatitle">절제</div>
+                                    <div id="nutri_restraint1" class="areagrbar n2">
+                                        <div class="bar" style="width:30.8%;background-color:#832f21;">
+                                            <span>30.8점(하)</span></div>
+                                    </div>
+                                    <div class="nutri_num">
+                                        <span id="restraint1" style="left: calc(49.9% - 30px);">49.9</span>
+                                        <span id="restraint2" style="left: calc(75% - 30px);">75.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="areagraphsect">
+                                <div class="areagraph">
+                                    <div class="areatitle">실천</div>
+                                    <div id="nutri_action1" class="areagrbar n3">
+                                        <div class="bar" style="width:81.0%;background-color:#832f21;">
+                                            <span>81.0점(상)</span></div>
+                                    </div>
+                                    <div class="nutri_num">
+                                        <span id="action1" style="left: calc(55.8% - 30px);">55.8</span>
+                                        <span id="action2" style="left: calc(78% - 30px);">78.0</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<span class="info2">*영역별 평가 기준: 같은 연령대의 사람들과 비교하여 점수가 75~100% 이면, <font color="green">‘양호’</font>. 25~74.9%이면 <font color="EB660A">‘개선 필요’</font>, 0~24.9%이면 <font color="red">‘개선 시급’</font>으로 표시합니다.</span>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="nqcont">
+                <p class="title">&lt;참고&gt; 영양지수 평가 결과의 해석</p>
+                <div class="tablesect2" style="margin:0;">
+                    <table class="nqtable">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th colspan="2">평가 결과</th>
+                                <th>해설</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="3">종합점수</td>
+                                <td colspan="2">양호(상)</td>
+                                <td>전반적으로 식생활이 양호하고 바람직한 식생활을 하고 있음</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">개선 필요(중)</td>
+                                <td>보통 수준의 식생활이나, 좀 더 바람직한 방향으로 개선 필요</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">개선 시급(하)</td>
+                                <td>전반적으로 식생활이 불량하고, 시급한 개선 필요 </td>
+                            </tr>
+                            <tr>
+                                <td rowspan="9">영역별 점수</td>
+                                <td rowspan="3">균형</td>
+                                <td>양호</td>
+                                <td>필요한 식품을 골고루 섭취하는 수준이 전반적으로 양호</td>
+                            </tr>
+                            <tr>
+                                <td>개선 필요</td>
+                                <td>필요한 식품을 골고루 섭취하는 수준이 전반적으로 보통 수준이나, 좀 더 바람직한 방향으로 개선 필요</td>
+                            </tr>
+                            <tr>
+                                <td>개선 시급</td>
+                                <td>필요한 식품을 골고루 섭취하는 수준이 전반적으로 불량하고, 시급한 개선 필요</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">절제</td>
+                                <td>양호</td>
+                                <td>건강에 좋지 않은 식품을 섭취하는 수준이 전반적으로 양호하고 바람직함</td>
+                            </tr>
+                            <tr>
+                                <td>개선 필요</td>
+                                <td>건강에 좋지 않은 식품을 섭취하는 수준이 전반적으로 보통 수준이나, 좀 더 바람직한 방향으로 개선 필요</td>
+                            </tr>
+                            <tr>
+                                <td>개선 시급</td>
+                                <td>건강에 좋지 않은 식품을 섭취하는 수준이 전반적으로 불량하고, 시급한 개선 필요</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">실천</td>
+                                <td>양호</td>
+                                <td>건강하고 안전한 식행동을 실천하는 수준이 전반적으로 양호하고 바람직함</td>
+                            </tr>
+                            <tr>
+                                <td>개선 필요</td>
+                                <td>건강하고 안전한 식행동을 실천하는 수준이 전반적으로 보통 수준이나, 좀 더 바람직한 방향으로 개선 필요</td>
+                            </tr>
+                            <tr>
+                                <td>개선 시급</td>
+                                <td>건강하고 안전한 식행동을 실천하는 수준이 전반적으로 불량하고, 시급한 개선 필요</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <p class="title">&lt;참고&gt; 연령별 영양지수 기준점수 <a href="javascript:aainfopen();" id="aa">보기 ▼</a></p>
+                <div class="tablesect2" style="margin:0;">
+                    <table id="aasect" class="nqtable">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" width="110">연령</th>
+                                <th colspan="2" rowspan="2" width="150">구분</th>
+                                <th colspan="3" style="border-bottom:1px solid #fff;">기준 점수</th>
+                            </tr>
+                            <tr>
+                                <th>하(<25.0%)< /th>
+                                <th>중(25.0≤ ~ <br class="br2">
+                                    < 75.0%) </th>
+                                <th>상(75.0% ≤)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td rowspan="4">취학전<br class="br2"> 어린이</td>
+                                <td colspan="2">종합 점수</td>
+                                <td>
+                                    < 52.4</td>
+                                <td>52.4 ≤ ~ < 67.0</td>
+                                <td>67.0 ≤</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">영역별<br class="br2"> 점수</td>
+                                <td>균형</td>
+                                <td>
+                                    < 40.9</td>
+                                <td>40.9 ≤ ~ < 60.7</td>
+                                <td>60.7 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>절제</td>
+                                <td>
+                                    < 50.0</td>
+                                <td>50.0 ≤ ~ < 75.0</td>
+                                <td>75.0 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>실천</td>
+                                <td>
+                                    < 55.9</td>
+                                <td>55.9 ≤ ~ < 78.0</td>
+                                <td>78.0 ≤</td>
+                            </tr>
+                            <tr style="background-color:red;">
+                                <td rowspan="4">학령기<br class="br2"> 어린이</td>
+                                <td colspan="2">종합 점수</td>
+                                <td>
+                                    < 53.3</td>
+                                <td>53.3 ≤ ~ < 70.7</td>
+                                <td>70.7 ≤</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">영역별<br class="br2"> 점수</td>
+                                <td>균형</td>
+                                <td>
+                                    < 35.1</td>
+                                <td>35.1 ≤ ~ < 52.6</td>
+                                <td>52.6 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>절제</td>
+                                <td>
+                                    < 50.0</td>
+                                <td>50.0 ≤ ~ < 66.8</td>
+                                <td>66.8 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>실천</td>
+                                <td>
+                                    < 54.5</td>
+                                <td>54.5 ≤ ~ < 80.0</td>
+                                <td>80.0 ≤</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4">청소년</td>
+                                <td colspan="2">종합 점수</td>
+                                <td>
+                                    < 44.0</td>
+                                <td>44.0 ≤ ~ < 58.6</td>
+                                <td>58.6 ≤</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">영역별<br class="br2"> 점수</td>
+                                <td>균형</td>
+                                <td>
+                                    < 32.3</td>
+                                <td>32.3 ≤ ~ < 50.2</td>
+                                <td>50.2 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>절제</td>
+                                <td>
+                                    < 47.3</td>
+                                <td>47.3 ≤ ~ < 64.4</td>
+                                <td>64.4 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>실천</td>
+                                <td>
+                                    < 41.6</td>
+                                <td>41.6 ≤ ~ < 62.0</td>
+                                <td>62.0 ≤</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4">성인</td>
+                                <td colspan="2">종합 점수</td>
+                                <td>
+                                    < 52.7</td>
+                                <td>52.7 ≤ ~ < 68.5</td>
+                                <td>68.5 ≤</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">영역별<br class="br2"> 점수</td>
+                                <td>균형</td>
+                                <td>
+                                    < 30.9</td>
+                                <td>30.9 ≤ ~ < 55.8</td>
+                                <td>55.8 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>절제</td>
+                                <td>
+                                    < 66.1</td>
+                                <td>66.1 ≤ ~ < 85.3</td>
+                                <td>85.3 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>실천</td>
+                                <td>
+                                    < 51.8</td>
+                                <td>51.8 ≤ ~ < 74.5</td>
+                                <td>74.5 ≤</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="4">노인</td>
+                                <td colspan="2">종합 점수</td>
+                                <td>
+                                    < 44.7</td>
+                                <td>44.7 ≤ ~ < 58.5</td>
+                                <td>58.5 ≤</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="3">영역별<br class="br2"> 점수</td>
+                                <td>균형</td>
+                                <td>
+                                    < 34.2</td>
+                                <td>34.2 ≤ ~ < 54.7</td>
+                                <td>54.7 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>절제</td>
+                                <td>
+                                    < 30.8</td>
+                                <td>30.8 ≤ ~ < 75.0</td>
+                                <td>75.0 ≤</td>
+                            </tr>
+                            <tr>
+                                <td>실천</td>
+                                <td>
+                                    < 53.5</td>
+                                <td>53.5 ≤ ~ < 71.2</td>
+                                <td>71.2 ≤</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="topbtn"><a href="javascript:window.scrollTo(0,0);"><img src="{% static 'images/top_btn.png' %}"
+                    alt="위로 가기 버튼" width="50" height="50"></a></div>
+    </body>
+
+</html>

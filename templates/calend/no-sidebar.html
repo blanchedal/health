@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<!--
+	Dopetrope by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+
+<head>
+	{% load static %}
+	<title>Dopetrope by HTML5 UP</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.css' rel='stylesheet' />
+	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/main.min.js'></script>
+	<script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.8.0/locales-all.min.js'></script>
+</head>
+
+<body class="no-sidebar is-preload">
+	<div id="page-wrapper">
+
+		<!-- Header -->
+		<section id="header">
+
+			<!-- Logo -->
+			<h1><a href="index.html">나만의 건강 캘린더</a></h1>
+
+			<!-- Nav -->
+			<nav id="nav">
+				<ul>
+					<li><a href="/home">Home</a></li>
+					<li>
+						<!-- <a href="#">Dropdown</a> -->
+						<ul>
+							<li><a href="#">Lorem ipsum dolor</a></li>
+							<li><a href="#">Magna phasellus</a></li>
+							<li><a href="#">Etiam dolore nisl</a></li>
+							<li>
+								<a href="#">Phasellus consequat</a>
+								<ul>
+									<li><a href="#">Magna phasellus</a></li>
+									<li><a href="#">Etiam dolore nisl</a></li>
+									<li><a href="#">Veroeros feugiat</a></li>
+									<li><a href="#">Nisl sed aliquam</a></li>
+									<li><a href="#">Dolore adipiscing</a></li>
+								</ul>
+							</li>
+							<li><a href="#">Veroeros feugiat</a></li>
+						</ul>
+					</li>
+					<li><a href="/search">Kcal info</a></li>
+					<li><a href="/check">Health Check</a></li>
+					<li class="current"><a href="">My Calendar</a></li>
+				</ul>
+			</nav>
+
+		</section>
+
+		<!-- Main -->
+		<section id="main">
+			<div class="container">
+
+				<!-- Content -->
+				<article class="box post">
+						<div id='calendar-container'>
+							<div id='calendar'></div>
+						</div>
+						<script>
+							(function () {
+								$(function () {
+									var calendarEl = $('#calendar')[0];
+									var calendar = new FullCalendar.Calendar(calendarEl, {
+										height: '800px', // calendar 높이 설정
+										expandRows: true, // 화면에 맞게 높이 재설정
+										slotMinTime: '08:00', // Day 캘린더에서 시작 시간
+										slotMaxTime: '20:00', // Day 캘린더에서 종료 시간
+										// 해더에 표시할 툴바
+										headerToolbar: {
+											left: 'prev,next today',
+											center: 'title',
+											right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+										},
+										initialView: 'dayGridMonth', // 초기 로드 될때 보이는 캘린더 화면(기본 설정: 달)
+										navLinks: true, // 날짜를 선택하면 Day 캘린더나 Week 캘린더로 링크
+										editable: true, // 수정 가능
+										selectable: true, // 달력 일자 드래그 설정가능
+										nowIndicator: true, // 현재 시간 마크
+										dayMaxEvents: true, // 이벤트가 오버되면 높이 제한 (+ 몇 개식으로 표현)
+										locale: 'ko', // 한국어 설정
+										eventAdd: function (obj) { // 이벤트가 추가되면 발생하는 이벤트
+											console.log(obj);
+										},
+										eventChange: function (obj) { // 이벤트가 수정되면 발생하는 이벤트
+											console.log(obj);
+										},
+										eventRemove: function (obj) { // 이벤트가 삭제되면 발생하는 이벤트
+											console.log(obj);
+										},
+										select: function (arg) { // 캘린더에서 드래그로 이벤트를 생성할 수 있다.
+											var title = prompt('Event Title:');
+											if (title) {
+												calendar.addEvent({
+													title: title,
+													start: arg.start,
+													end: arg.end,
+													allDay: arg.allDay
+												})
+											}
+											calendar.unselect()
+										}
+									});
+									// 캘린더 랜더링
+									calendar.render();
+								});
+							})();
+						</script>
+				</article>
+
+			</div>
+		</section>
+
+		<!-- Footer -->
+		<!-- <section id="footer">
+			<div class="container">
+				<div class="row">
+					<div class="col-8 col-12-medium">
+						<section>
+							<header>
+								<h2>Blandit nisl adipiscing</h2>
+							</header>
+							<ul class="dates">
+								<li>
+									<span class="date">Jan <strong>27</strong></span>
+									<h3><a href="#">Lorem dolor sit amet veroeros</a></h3>
+									<p>Ipsum dolor sit amet veroeros consequat blandit ipsum phasellus lorem consequat
+										etiam.</p>
+								</li>
+								<li>
+									<span class="date">Jan <strong>23</strong></span>
+									<h3><a href="#">Ipsum sed blandit nisl consequat</a></h3>
+									<p>Blandit phasellus lorem ipsum dolor tempor sapien tortor hendrerit adipiscing
+										feugiat lorem.</p>
+								</li>
+								<li>
+									<span class="date">Jan <strong>15</strong></span>
+									<h3><a href="#">Magna tempus lorem feugiat</a></h3>
+									<p>Dolore consequat sed phasellus lorem sed etiam nullam dolor etiam sed amet sit
+										consequat.</p>
+								</li>
+								<li>
+									<span class="date">Jan <strong>12</strong></span>
+									<h3><a href="#">Dolore tempus ipsum feugiat nulla</a></h3>
+									<p>Feugiat lorem dolor sed nullam tempus lorem ipsum dolor sit amet nullam
+										consequat.</p>
+								</li>
+								<li>
+									<span class="date">Jan <strong>10</strong></span>
+									<h3><a href="#">Blandit tempus aliquam?</a></h3>
+									<p>Feugiat sed tempus blandit tempus adipiscing nisl lorem ipsum dolor sit amet
+										dolore.</p>
+								</li>
+							</ul>
+						</section>
+					</div>
+					<div class="col-4 col-12-medium">
+						<section>
+							<header>
+								<h2>What's this all about?</h2>
+							</header>
+							<a href="#" class="image featured"><img src="{% static 'images/pic10.jpg' %}" alt="" /></a>
+							<p>
+								This is <strong>Dopetrope</strong> a free, fully responsive HTML5 site template by
+								<a href="http://twitter.com/ajlkn">AJ</a> for <a href="http://html5up.net/">HTML5 UP</a>
+								It's released for free under
+								the <a href="http://html5up.net/license/">Creative Commons Attribution</a> license so
+								feel free to use it for any personal or commercial project &ndash; just don't forget to
+								credit us!
+							</p>
+							<footer>
+								<ul class="actions">
+									<li><a href="#" class="button">Find out more</a></li>
+								</ul>
+							</footer>
+						</section>
+					</div>
+					<div class="col-4 col-6-medium col-12-small">
+						<section>
+							<header>
+								<h2>Tempus consequat</h2>
+							</header>
+							<ul class="divided">
+								<li><a href="#">Lorem ipsum dolor sit amet sit veroeros</a></li>
+								<li><a href="#">Sed et blandit consequat sed tlorem blandit</a></li>
+								<li><a href="#">Adipiscing feugiat phasellus sed tempus</a></li>
+								<li><a href="#">Hendrerit tortor vitae mattis tempor sapien</a></li>
+								<li><a href="#">Sem feugiat sapien id suscipit magna felis nec</a></li>
+								<li><a href="#">Elit class aptent taciti sociosqu ad litora</a></li>
+							</ul>
+						</section>
+					</div>
+					<div class="col-4 col-6-medium col-12-small">
+						<section>
+							<header>
+								<h2>Ipsum et phasellus</h2>
+							</header>
+							<ul class="divided">
+								<li><a href="#">Lorem ipsum dolor sit amet sit veroeros</a></li>
+								<li><a href="#">Sed et blandit consequat sed tlorem blandit</a></li>
+								<li><a href="#">Adipiscing feugiat phasellus sed tempus</a></li>
+								<li><a href="#">Hendrerit tortor vitae mattis tempor sapien</a></li>
+								<li><a href="#">Sem feugiat sapien id suscipit magna felis nec</a></li>
+								<li><a href="#">Elit class aptent taciti sociosqu ad litora</a></li>
+							</ul>
+						</section>
+					</div>
+					<div class="col-4 col-12-medium">
+						<section>
+							<header>
+								<h2>Vitae tempor lorem</h2>
+							</header>
+							<ul class="social">
+								<li><a class="icon brands fa-facebook-f" href="#"><span
+											class="label">Facebook</span></a></li>
+								<li><a class="icon brands fa-twitter" href="#"><span class="label">Twitter</span></a>
+								</li>
+								<li><a class="icon brands fa-dribbble" href="#"><span class="label">Dribbble</span></a>
+								</li>
+								<li><a class="icon brands fa-tumblr" href="#"><span class="label">Tumblr</span></a></li>
+								<li><a class="icon brands fa-linkedin-in" href="#"><span
+											class="label">LinkedIn</span></a></li>
+							</ul>
+							<ul class="contact">
+								<li>
+									<h3>Address</h3>
+									<p>
+										Untitled Incorporated<br />
+										1234 Somewhere Road Suite<br />
+										Nashville, TN 00000-0000
+									</p>
+								</li>
+								<li>
+									<h3>Mail</h3>
+									<p><a href="#">someone@untitled.tld</a></p>
+								</li>
+								<li>
+									<h3>Phone</h3>
+									<p>(800) 000-0000</p>
+								</li>
+							</ul>
+						</section>
+					</div>
+					<div class="col-12">
+
+						<!-- Copyright -->
+						<div id="copyright">
+							<ul class="links">
+								<li>&copy; Untitled. All rights reserved.</li>
+								<li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</section>
+
+	</div> -->
+
+	<!-- Scripts -->
+	<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+	<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
+	<script src="{% static 'assets/js/browser.min.js' %}"></script>
+	<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+	<script src="{% static 'assets/js/util.js' %}"></script>
+	<script src="{% static 'assets/js/main.js' %}"></script>
+
+</body>
+
+</html>

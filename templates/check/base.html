@@ -1,0 +1,71 @@
+{% load static %}
+<head>
+  <link rel="stylesheet" href="{% static 'assets/css/main.css' %}">
+</head>
+	<body class="homepage is-preload">
+		<div id="page-wrapper">
+
+			<!-- Header -->
+				<section id="header">
+					<!-- Logo -->
+						<a href="index.html"> <img src="{% static 'images/logored.png' %}" alt="" /></a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="/signup" onclick="window.open(this.href, '_blank', 'width=900, height=1913, toolbars=no, scrollbars=yes'); return false;">SignUp</a>&nbsp;&nbsp;&nbsp;&nbsp;
+						<a href="/login" onclick="window.open(this.href, '_blank', 'width=900, height=1913, toolbars=no, scrollbars=yes'); return false;">Login</a>
+					<!-- Member & login -->
+					<!-- Nav -->
+						<nav id="nav">
+							<ul>
+								<li class="current"><a href="/home">Home</a></li>
+								<li>
+									<!-- <a href="#">Dropdown</a>
+									<ul>
+										<li><a href="#">Lorem ipsum dolor</a></li>
+										<li><a href="#">Magna phasellus</a></li>
+										<li><a href="#">Etiam dolore nisl</a></li>
+										<li>
+											<a href="#">Phasellus consequat</a>
+											<ul>
+												<li><a href="#">Magna phasellus</a></li>
+												<li><a href="#">Etiam dolore nisl</a></li>
+												<li><a href="#">Veroeros feugiat</a></li>
+												<li><a href="#">Nisl sed aliquam</a></li>
+												<li><a href="#">Dolore adipiscing</a></li>
+											</ul>
+										</li>
+										<li><a href="#">Veroeros feugiat</a></li>
+									</ul> -->
+								</li>
+								<li class="current"><a href="/search">Kcal info</a></li>
+								<li class="current"><a href="/check">Health Check</a></li>
+								<li class="current"><a href="/calend">My Calendar</a></li>
+							</ul>
+						</nav>
+				
+					
+
+		<!-- Scripts -->
+			<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+			<script src="{% static 'assets/js/jquery.dropotron.min.js' %}"></script>
+			<script src="{% static 'assets/js/browser.min.js' %}"></script>
+			<script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
+			<script src="{% static 'assets/js/util.js' %}"></script>
+			<script src="{% static 'assets/js/main.js' %}"></script>	
+            
+    {% block content %}
+ 
+    {% endblock %}
+
+	</body>
+
+	<!-- Copyright -->
+	<div id="copyright">
+		<ul class="links">
+		<li>&copy; Multicampus Data Convergence PJT(TEAM. KSOJ). All rights reserved.</li>
+		<li>Design Ref.: <a target="_blank" href="http://html5up.net">HTML5 UP</a></li>
+		<li><a class="icon brands fa-facebook-f" a target="_blank" href="https://www.facebook.com/multicampus.official"><span class="label">Facebook</span></a></li>
+		<li><a class="icon brands fa-youtube" a target="_blank" href="https://www.youtube.com/multicampus_official"><span class="label">Youtube</span></a>
+		<li><a class="icon brands fa-dribbble" a target="_blank" href="https://post.naver.com/my.nhn?memberNo=44851817"><span class="label">NaverPost</span></a></li>
+		</ul>
+	</div>
+	
+</html>

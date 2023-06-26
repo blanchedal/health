@@ -1,0 +1,626 @@
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+	{% load static %}
+	<title>학령기 어린이(만 6~11세) 영양지수 체크리스트</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css' %}">
+	<style type="text/css">
+		.topnav>li:nth-child(2) .ubar {
+			visibility: visible;
+			opacity: 1;
+		}
+	</style>
+	<script type="text/javascript" src="{% static 'assets/js/common.js' %}"></script>
+	<script type="text/javascript" src="{% static 'assets/js/jquery-latest.min.js' %}"></script>
+	<script>
+		var qstr = "c=c";
+		var seq = 1;
+		function send_data() {
+			seq = 1;
+			qstr = "c=c";
+			if (check_radio(document.foodform.vegetable, '채소류 반찬') === false) return;
+			if (check_radio(document.foodform.fruit, '과일') === false) return;
+			if (check_radio(document.foodform.milk, '흰 우유나 유제품') === false) return;
+			if (check_radio(document.foodform.fish, '생선이나 조개류') === false) return;
+			if (check_radio(document.foodform.egg, '달걀') === false) return;
+
+			if (check_radio(document.foodform.bean, '콩이나 두부') === false) return;
+			if (check_radio(document.foodform.nuts, '견과류') === false) return;
+			if (check_radio(document.foodform.sugar, '단음식 또는 단 음료') === false) return;
+			if (check_radio(document.foodform.fat, '기름진 음식') === false) return;
+			if (check_radio(document.foodform.ramen, '라면') === false) return;
+
+			if (check_radio(document.foodform.prssmeat, '가공육류') === false) return;
+			if (check_radio(document.foodform.overeat, '과식') === false) return;
+			if (check_radio(document.foodform.schoolarea, '학교나 학원주변') === false) return;
+			if (check_radio(document.foodform.eatwith, '식사습관') === false) return;
+			if (check_radio(document.foodform.breakfast, '아침 식사') === false) return;
+
+			if (check_radio(document.foodform.foodlabel, '식품 표시') === false) return;
+			if (check_radio(document.foodform.handwash, '손 씻기') === false) return;
+			if (check_radio(document.foodform.withfamily, '가족과 식사') === false) return;
+			if (check_radio(document.foodform.exercise, '운동') === false) return;
+
+			if (check_radio(document.foodform.gender, '성별') === false) return;
+
+			if (document.foodform.age.value == "") {
+				alert("나이를 입력하셔야 합니다.");
+				document.foodform.age.focus();
+				return;
+			}
+			else {
+				var nage = parseInt(document.foodform.age.value);
+				if (nage == NaN) {
+					alert("나이를 정확하게 입력해주세요.");
+					document.foodform.age.focus();
+					return;
+				}
+				if (nage < 6 || nage > 11) {
+					var alert_str = "'학령기 어린이'에 해당하는 연령은 6 ~ 11세입니다.\n"
+						+ "5세 이하는 메뉴에서 '취학전 아동 영양지수'를,\n"
+						+ "18세 이하는 '청소년 영양지수'을 선택하고 진행해주시기 바랍니다.";
+					alert(alert_str);
+					return;
+				}
+
+			}
+			qstr += "&a1=" + document.foodform.age.value;
+
+			if (document.foodform.height.value == "") {
+				alert("신장을 입력하셔야 합니다.");
+				document.foodform.height.focus();
+				return;
+			}
+			qstr += "&a2=" + document.foodform.height.value;
+
+			if (document.foodform.weight.value == "") {
+				alert("몸무게를 입력하셔야 합니다.");
+				document.foodform.weight.focus();
+				return;
+			}
+			qstr += "&a3=" + document.foodform.weight.value;
+
+			document.location = "child_result.html?" + qstr;
+		}
+		function check_radio(dm, stitle) {
+			var jud = -1;
+			for (var i = 0; i < dm.length; i++) {
+				if (dm[i].checked === true) {
+					jud = i;
+					break;
+				}
+			}
+			if (jud === -1) {
+				alert("'" + stitle + "' 항목중 1개를 선택하셔야 합니다.");
+				dm[0].focus();
+				return false;
+			}
+
+			qstr += "&q" + seq + "=" + dm[jud].value;
+			seq++;
+
+			return true;
+		}
+		function onload_func() {
+			/*
+			var alen = document.foodform.elements.length;
+			for(var i = 0;i < alen;i++){
+				if(document.foodform.elements[i].type == "radio"){
+					document.foodform.elements[i].checked = true;
+				}
+			}
+			*/
+		}
+	</script>
+</head>
+
+<body onload="onload_func()">
+	<script type="text/javascript" src="{% static 'assets/js/nav.js' %}"></script>
+
+	<div class="subtitle"></div>
+
+	<div class="survey_topimg2">
+		<p class="toptitle">영양지수 체크리스트<br class="br2"><span>(학령기 어린이, 만 6~11세)</span></p>
+		<p class="topsub">* 균형: 7문항, 절제: 7문항, 실천: 5문항으로 구성되어 있습니다.</p>
+	</div>
+
+	<div id="contents" class="contents">
+
+		<div class="survey_info">
+			<p><span>집과 집 밖(학교, 편의점, 음식점 등)</span>에서 먹은 식품을 <span>모두 포함</span>하여 답해 주시기 바랍니다.</p>
+			<img src="{% static 'images/h_child.png' %}" alt="학령기 어린이 캐릭터">
+		</div>
+
+		<form name="foodform">
+			<div class="survey_area">
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n01">
+							<p>1</p>
+						</div>
+						<p>한 번 식사할 때 <span>채소류 반찬(김치포함)</span>을 몇 가지나 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="vegetable" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="vegetable" value="2">
+							<p>② 1가지</p>
+						</label></dd>
+					<dd><label><input type="radio" name="vegetable" value="3">
+							<p>③ 2가지</p>
+						</label></dd>
+					<dd><label><input type="radio" name="vegetable" value="4">
+							<p>④ 3가지</p>
+						</label></dd>
+					<dd><label><input type="radio" name="vegetable" value="5">
+							<p>⑤ 4가지 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n02">
+							<p>2</p>
+						</div>
+						<p><span>과일</span>을 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="fruit" value="1">
+							<p>① 2주일에 1번 이하</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fruit" value="2">
+							<p>② 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fruit" value="3">
+							<p>③ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fruit" value="4">
+							<p>④ 하루에 1번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fruit" value="5">
+							<p>⑤ 하루에 2번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n03">
+							<p>3</p>
+						</div>
+						<p><span>흰 우유나 유제품(치즈, 플레인 요거트)</span>을 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="milk" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="milk" value="2">
+							<p>② 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="milk" value="3">
+							<p>③ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="milk" value="4">
+							<p>④ 하루에 1번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="milk" value="5">
+							<p>⑤ 하루에 2번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n05">
+							<p>4</p>
+						</div>
+						<p><span>생선이나 조개류(오징어, 굴, 새우 등 포함)</span>를 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="fish" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fish" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fish" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fish" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fish" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n06">
+							<p>5</p>
+						</div>
+						<p><span>달걀(메추리알 포함)</span>을 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="egg" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="egg" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="egg" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="egg" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="egg" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n07">
+							<p>6</p>
+						</div>
+						<p><span>콩이나 두부(두유 포함)</span>를 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="bean" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="bean" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="bean" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="bean" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="bean" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n16">
+							<p>7</p>
+						</div>
+						<p><span>견과류(호두, 아몬드 등)</span>를 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="nuts" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="nuts" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="nuts" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="nuts" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="nuts" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n08">
+							<p>8</p>
+						</div>
+						<p><span>단 음식(초콜릿, 젤리 등) 또는 단 음료(탄산음료, 과일맛 음료, 흑당 음료 등)</span>를 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="sugar" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="sugar" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="sugar" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="sugar" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="sugar" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n09">
+							<p>9</p>
+						</div>
+						<p><span>기름진 간식(생크림 빵, 버터칩, 핫도그 등)이나 튀김류(닭튀김, 탕수육, 감자튀김 등)</span>를 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="fat" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fat" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fat" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fat" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="fat" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n17">
+							<p>10</p>
+						</div>
+						<p><span>라면(컵라면 포함)</span>을 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="ramen" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="ramen" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="ramen" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="ramen" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="ramen" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n11">
+							<p>11</p>
+						</div>
+						<p><span>햄, 소시지, 베이컨 등의 가공육류</span>를 얼마나 자주 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="prssmeat" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="prssmeat" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="prssmeat" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="prssmeat" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="prssmeat" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n18">
+							<p>12</p>
+						</div>
+						<p><span>과식</span>을 얼마나 자주 하나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="overeat" value="1">
+							<p>① 거의 하지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="overeat" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="overeat" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="overeat" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="overeat" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n19">
+							<p>13</p>
+						</div>
+						<p><span>학교나 학원주변(편의점, 패스트푸드점, 분식점 등)</span>에서 음식을 얼마나 자주 사 먹나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="schoolarea" value="1">
+							<p>① 사 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="schoolarea" value="2">
+							<p>② 2주일에 1번 정도</p>
+						</label></dd>
+					<dd><label><input type="radio" name="schoolarea" value="3">
+							<p>③ 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="schoolarea" value="4">
+							<p>④ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="schoolarea" value="5">
+							<p>⑤ 하루에 1번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n14">
+							<p>14</p>
+						</div>
+						<p><span>식사할 때 돌아다니거나, 스마트폰, 게임, TV, 책 등을 보면서 식사</span>하는 편인가요?</p>
+					</dt>
+					<dd><label><input type="radio" name="eatwith" value="1">
+							<p>① 전혀 그렇지 않다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="eatwith" value="2">
+							<p>② 그렇지 않은 편이다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="eatwith" value="3">
+							<p>③ 보통이다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="eatwith" value="4">
+							<p>④ 그렇다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="eatwith" value="5">
+							<p>⑤ 매우 그렇다</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n12">
+							<p>15</p>
+						</div>
+						<p><span>아침 식사</span>를 얼마나 자주 하나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="breakfast" value="1">
+							<p>① 거의 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="breakfast" value="2">
+							<p>② 일주일에 1~2번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="breakfast" value="3">
+							<p>③ 일주일에 3~4번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="breakfast" value="4">
+							<p>④ 일주일에 5~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="breakfast" value="5">
+							<p>⑤ 매일</p>
+						</label></dd>
+				</dl>
+
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n20">
+							<p>16</p>
+						</div>
+						<p><span>가공식품을 살 때 식품표시(영양표시, 알레르기 성분 표시 등)</span>를 확인하나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="foodlabel" value="1">
+							<p>① 전혀 확인하지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="foodlabel" value="2">
+							<p>② 확인하지 않는 편이다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="foodlabel" value="3">
+							<p>③ 보통이다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="foodlabel" value="4">
+							<p>④ 확인하는 편이다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="foodlabel" value="5">
+							<p>⑤ 항상 확인한다</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n13">
+							<p>17</p>
+						</div>
+						<p>음식을 먹기 전에 <span>손을 씻나요?</span></p>
+					</dt>
+					<dd><label><input type="radio" name="handwash" value="1">
+							<p>① 전혀 씻지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="handwash" value="2">
+							<p>② 씻지 않는 편이다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="handwash" value="3">
+							<p>③ 보통이다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="handwash" value="4">
+							<p>④ 씻는 편이다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="handwash" value="5">
+							<p>⑤ 항상 씻는다</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n21">
+							<p>18</p>
+						</div>
+						<p>평일에 얼마나 자주 <span>가족과 함께</span> 식사하나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="withfamily" value="1">
+							<p>① 함께 먹지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="withfamily" value="2">
+							<p>② 일주일에 1~3번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="withfamily" value="3">
+							<p>③ 일주일에 4~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="withfamily" value="4">
+							<p>④ 하루에 1번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="withfamily" value="5">
+							<p>⑤ 하루에 2번 이상</p>
+						</label></dd>
+				</dl>
+				<dl class="survey_cont" role="radiogroup">
+					<dt>
+						<div class="num n15">
+							<p>19</p>
+						</div>
+						<p>하루에 <span>30분 이상의 운동(체육시간 포함)</span>을 얼마나 자주 하나요?</p>
+					</dt>
+					<dd><label><input type="radio" name="exercise" value="1">
+							<p>① 하지 않는다</p>
+						</label></dd>
+					<dd><label><input type="radio" name="exercise" value="2">
+							<p>② 일주일에 1~2번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="exercise" value="3">
+							<p>③ 일주일에 3~4번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="exercise" value="4">
+							<p>④ 일주일에 5~6번</p>
+						</label></dd>
+					<dd><label><input type="radio" name="exercise" value="5">
+							<p>⑤ 매일</p>
+						</label></dd>
+				</dl>
+
+				<div class="generaldet">
+					<div class="gen_title">
+						<p>일반사항</p>
+					</div>
+					<dl class="gen_cont">
+						<dt>1. 성별은?</dt>
+						<dd><input type="radio" name="gender" value="남" id="gender_male" style="width:auto"> <label
+								for="gender_male">남자</label>
+							<span class="nd">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="nm"><br></span>
+							<input type="radio" name="gender" value="여" id="gender_famale" style="width:auto"> <label
+								for="gender_famale">여자</label>
+						</dd>
+						<dt><label for="age">2. 만 나이는?</label></dt>
+						<dd>만<input type="number" name="age" id="age">세</dd>
+						<dt><label for="height">3. 키는?</label></dt>
+						<dd><input type="number" name="height" id="height">cm</dd>
+						<dt><label for="weight">4. 몸무게는?</label></dt>
+						<dd><input type="number" name="weight" title="몸무게 입력" />kg</dd>
+					</dl>
+				</div>
+				<div class="resultsect">
+					<a href="/check" class="printbtn">
+						<p>뒤로 가기</p>
+					</a>
+					<div id="printinfo" class="printinfosect">
+					</div>
+					<div id="blackback" class="blackback" onclick="closebtn();"></div>
+					<a href="javascript:send_data()" class="resultbtn">
+						<p>　결과 보기</p>
+					</a>
+				</div>
+			</div>
+	</div>
+	</form>
+	</div>
+	<div class="topbtn"><a href="javascript:window.scrollTo(0,0);"><img src="{% static 'images/top_btn.png' %}"
+				alt="위로 가기 버튼" width="100" height="100"></a></div>
+	<script>
+		(function () {
+			$(".topnav > li").bind("mouseenter focusin", function () {
+				$(this).addClass("on").siblings().removeClass("on");
+			});
+			$(".topnav > li").bind("mouseleave focusout", function () {
+				$(this).removeClass("on");
+			});
+		})(); 
+	</script>
+</body>
+
+</html>

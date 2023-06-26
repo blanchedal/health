@@ -1,0 +1,231 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	{% load static %}
+	<title>Dopetrope by HTML5 UP</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
+</head>
+
+<body class="left-sidebar is-preload">
+	<div id="page-wrapper">
+
+		<!-- Header -->
+		<section id="header">
+
+			<!-- Logo -->
+			<h1><a href="#">음식별 칼로리 정보</a></h1>
+
+			<!-- Nav -->
+			<nav id="nav">
+				<ul>
+					<li><a href="/home">Home</a></li>
+					<li>
+						<!-- <a href="#">Dropdown</a> -->
+						<ul>
+							<li><a href="#">Lorem ipsum dolor</a></li>
+							<li><a href="#">Magna phasellus</a></li>
+							<li><a href="#">Etiam dolore nisl</a></li>
+							<li>
+								<a href="#">Phasellus consequat</a>
+								<ul>
+									<li><a href="#">Magna phasellus</a></li>
+									<li><a href="#">Etiam dolore nisl</a></li>
+									<li><a href="#">Veroeros feugiat</a></li>
+									<li><a href="#">Nisl sed aliquam</a></li>
+									<li><a href="#">Dolore adipiscing</a></li>
+								</ul>
+							</li>
+							<li><a href="#">Veroeros feugiat</a></li>
+						</ul>
+					</li>
+					<li class="current"><a href="">Kcal info</a></li>
+					<li><a href="/check">Health Check</a></li>
+					<li><a href="/calend">My Calendar</a></li>
+				</ul>
+			</nav>
+
+		</section>
+
+		<!-- Main -->
+		<section id="main">
+			<div class="container">
+				<div class="row">
+					<div class="col-4 col-12-medium">
+
+						<!-- 왼쪽 사이드바 위(검색)-->
+						<section class="box">
+							<header>
+								<p>
+								<h1>통합검색</h1>
+								</p>
+								<form id="search-form" action="{% url 'search_history' %}">
+									<label for="type">카테고리 선택:</label>
+									<select id="type" name="selected_type">
+										<option value="">전체</option>
+										{% for type, label in types %}
+										<option value="{{ type }}">{{ label }}</option>
+										{% endfor %}
+									</select>
+									<label for="query">음식검색:</label>
+									<input id="query" name="keyword" type="text"><br>
+									<br>
+									<button type="submit">검색</button>
+								</form>
+							</header>
+							<p>음식별 칼로리 정보는 농촌진흥청과 농식품종합정보시스템에서 제공하는 대한민국 기준음식정보를 데이터베이스 자료입니다.</p>
+						</section>
+						<!-- 왼쪽 사이드바 아래(건강정보 관련 링크) -->
+						<section class="box">
+							<header>
+								<h3>건강정보안내</h3>
+							</header>
+							<ul class="divided">
+								<li style="user-select: auto;">
+									<a href="http://www.jungonenutri.com/user/diet/dietSearch.do" target="_blank"
+										title="사이트가 새창에서 열립니다" style="user-select: auto;"><img
+											src="{% static 'images/logohealth1.png' %}"></a>
+									<br>
+									<span style="user-select: auto;">건강한 식생활 관리를 위한 맞춤형 식단을 제공합니다. 본인에게 해당되는 성별 및 연령을
+										선택하면, 1일 에너지 권장량에 맞춰 설계된 다양한 추천 식단과 상세 정보를 확인할 수 있습니다.</span>
+									</span>
+								<li style="user-select: auto;">
+									<a href="https://www.foodsafetykorea.go.kr/portal/specialinfo/searchInfoProduct.do?menu_grp=MENU_NEW04&menu_no=2815"
+										target="_blank" title="사이트가 새창에서 열립니다" style="user-select: auto;"><img
+											src="{% static 'images/logohealth2.png' %}"></a>
+									<br>
+									<span style="user-select: auto;">국내외 식품안정정보를 총망라해 국민 눈높이의 생활밀차형 식품안정정보를 제공함으로써 국민
+										중심의 식품안전 쳬게를 강화하고 궁극적으로 모든 국민이 건강하고 안전한 삶을 누리는 사회 실현에 기여하고 있습니다.</span>
+									</span>
+								</li>
+								<li style="user-select: auto;">
+									<a href="https://www.nosmokeguide.go.kr/index.do" target="_blank" title="사이트가 새창에서 열립니다"
+										style="user-select: auto;"><img src="{% static 'images/logohealth3.gif' %}"></a>
+									<br>
+									<span style="user-select: auto;">국가 금연정책 및 금연사업을 소개하고, 흡연예방 및 금연촉진을 위한 다양한 금연정보 및
+										서비스, 금연 실천프로그램 등을 제공함으로써 국민의 흡연예방 및 흡연율 감소를 목표로 보건복지부와 국립암센터에서 운영하는 대한민국 대표 금연포털
+										사이트입니다.</span>
+									</span>
+								</li>
+							</ul>
+						</section>
+					</div>
+					<div class="col-8 col-12-medium imp-medium">
+
+						<!-- 메인 내용(검색결과 출력)-->
+						<article class="box post">
+							<div id="results">
+								<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+								<script>
+									// 검색결과 화면에 출력
+									$(function () {
+										const searchForm = $('#search-form');
+										const resultsContainer = $('#results');
+
+										function renderResultsTable(results) {
+											let table = $('<table></table>');
+											let headerRow = $('<thead><tr><th>음식명</th><th>기준중량</th><th>칼로리</th></tr></thead>');
+											let bodyRows = $('<tbody></tbody>');
+
+											results.forEach(result => {
+												let row = $('<tr></tr>');
+												row.append($('<td></td>').text(result.name));
+												row.append($('<td></td>').text(result.wei));
+												row.append($('<td></td>').text(result.cal));
+												bodyRows.append(row);
+											});
+
+											table.append(headerRow).append(bodyRows);
+											table.css('border-collapse', 'collapse');
+											table.css('border', '0.5px solid #ccc');
+											table.find('th, td').css('border', '0.5px solid #ccc');
+											headerRow.css('background-color', '#d52349');
+											headerRow.css('color', '#fff');
+
+											return table;
+										}
+										// 사용자의 카테고리 선택 or 키워드 검색에 따라 결과화면 동적으로 업데이트(js,ajax,jquery호출)
+										function search(query, type) {
+											$.ajax({
+												url: '{% url "search_calories" %}',
+												data: { 'query': query, 'type': type },
+												dataType: 'json',
+												success: function (data) {
+													if (data.results.length > 0) {
+														const resultsTable = renderResultsTable(data.results);
+														resultsContainer.html(resultsTable);
+														saveSearchHistory(query, type);
+													} else {
+														resultsContainer.html('검색 결과가 없습니다.');
+													}
+												}
+											});
+										}
+										// 
+										function saveSearchHistory(keyword, selectedType) {
+											$.ajax({
+												url: '{% url "search_history" %}',
+												data: { 'keyword': keyword, 'selected_type': selectedType },
+												dataType: 'json',
+												success: function (data) {
+													console.log('검색 기록 저장 완료');
+												}
+											});
+										}
+
+										$('#type').change(function () {
+											const query = $('#query').val();
+											const type = $(this).val();
+											search(query, type);
+										});
+
+										searchForm.submit(function (event) {
+											event.preventDefault();
+											const query = $('#query').val();
+											const type = $('#type').val();
+											search(query, type);
+										});
+									});
+								</script>
+							</div>
+						</article>
+					</div>
+				</div>
+			</div>
+		</section>
+
+		<!-- Copyright -->
+		<div id="copyright">
+			<ul class="links">
+				<li>&copy; Multicampus Data Convergence PJT(TEAM. KSOJ). All rights reserved.</li>
+				<li>Design Ref.: <a target="_blank" href="http://html5up.net">HTML5 UP</a></li>
+				<li><a class="icon brands fa-facebook-f" a target="_blank"
+						href="https://www.facebook.com/multicampus.official"><span class="label">Facebook</span></a>
+				</li>
+				<li><a class="icon brands fa-youtube" a target="_blank"
+						href="https://www.youtube.com/multicampus_official"><span class="label">Youtube</span></a>
+				<li><a class="icon brands fa-dribbble" a target="_blank"
+						href="https://post.naver.com/my.nhn?memberNo=44851817"><span class="label">NaverPost</span></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	</div>
+	</div>
+	</section>
+
+	</div>
+
+	<!-- Scripts -->
+	<script src="assets/js/jquery.min.js"></script>
+	<script src="assets/js/jquery.dropotron.min.js"></script>
+	<script src="assets/js/browser.min.js"></script>
+	<script src="assets/js/breakpoints.min.js"></script>
+	<script src="assets/js/util.js"></script>
+	<script src="assets/js/main.js"></script>
+
+</body>
+
+</html>

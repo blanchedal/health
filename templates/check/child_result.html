@@ -1,0 +1,408 @@
+<!DOCTYPE HTML>
+<html lang="ko" style="user-select: auto;"><head style="user-select: auto;">
+    <title style="user-select: auto;">학령기 어린이 (만 6~11세) 영양지수 결과지</title>
+<link rel="stylesheet" type="text/css" href="common/style.css" style="user-select: auto;">
+<script type="text/javascript" src="common/common.js" style="user-select: auto;"></script>
+<script type="text/javascript" src="common/jquery-latest.min.js" style="user-select: auto;"></script>
+<script src="nutri.js" style="user-select: auto;"></script>
+<script style="user-select: auto;">
+var mainmenu = "child";
+
+// 부족답 번호.
+var area1shortage = [];
+var area2shortage = [];
+var area3shortage = [];
+
+var balance_grade, restraint_grade, action_grade;
+
+function onload_func(){
+	parse_qstring(document.defaultView.location.href);
+	set_mainGrade();
+
+	// 학령기 어린이(만 3세 ~ 5세)
+	document.getElementById("fage").innerHTML = (param['a1'] != undefined) ? "만 "+param['a1']+"세" : "";
+	var nage = parseInt(param['a1']);
+	var gender = (param['q20'] != undefined) ? decodeURIComponent(param['q20']) : "";
+	document.getElementById("fgender").innerHTML = gender;
+	document.getElementById("fheight").innerHTML = (param['a2'] != undefined) ? param['a2']+"cm" : "";
+	var nheight = parseInt(param['a2']);
+	document.getElementById("fweight").innerHTML = (param['a3'] != undefined) ? param['a3']+"kg" : "";
+	var nweight = parseInt(param['a3']);
+
+	var area1point = 0;
+	var vegetable = (param['q1'] != undefined) ? parseInt(param['q1']) : 0;		// 채소류
+	area1point += (vegetable-1)*0.146;
+	if(vegetable < 4) area1shortage.push("채소");
+
+	var fruit = (param['q2'] != undefined) ? parseInt(param['q2']) : 0;			// 과일
+	area1point += (fruit-1)*0.179;
+	if(fruit < 4) area1shortage.push("과일");
+
+	var milk = (param['q3'] != undefined) ? parseInt(param['q3']) : 0;			// 우유
+	area1point += (milk-1)*0.102;
+	if(milk < 5) area1shortage.push("우유");
+
+	var fish = (param['q4'] != undefined) ? parseInt(param['q4']) : 0;			// 생선
+	area1point += (fish-1)*0.153;
+	if(fish < 4) area1shortage.push("생선");
+
+	var egg = (param['q5'] != undefined) ? parseInt(param['q5']) : 0;			// 달걀
+	area1point += (egg-1)*0.092;
+	if(egg < 5) area1shortage.push("달걀");
+
+	var bean = (param['q6'] != undefined) ? parseInt(param['q6']) : 0;			// 콩
+	area1point += (bean-1)*0.214;
+	if(bean < 4) area1shortage.push("콩");
+
+	var nuts = (param['q7'] != undefined) ? parseInt(param['q7']) : 0;			// 견과류
+	area1point += (nuts-1)*0.114;
+	if(nuts < 4) area1shortage.push("견과류");
+
+	var f1point = area1point * 100 / 4;
+
+	var area2point = 0;
+	var sugar = (param['q8'] != undefined) ? parseInt(param['q8']) : 0;			// 첨가당
+	area2point += (5-sugar)*0.168;
+	if(sugar > 2) area2shortage.push("단음식·단음료");
+
+	var fat = (param['q9'] != undefined) ? parseInt(param['q9']) : 0;			// 기름진 음식
+	area2point += (5-fat)*0.161;
+	if(fat > 2) area2shortage.push("기름진 음식");
+
+	var ramen = (param['q10'] != undefined) ? parseInt(param['q10']) : 0;		// 라면
+	area2point += (5-ramen)*0.172;
+	if(ramen > 2) area2shortage.push("라면");
+
+	var prssmeat = (param['q11'] != undefined) ? parseInt(param['q11']) : 0;	// 가공육
+	area2point += (5-prssmeat)*0.173;
+	if(prssmeat > 2) area2shortage.push("가공육");
+
+	var overeat = (param['q12'] != undefined) ? parseInt(param['q12']) : 0;		// 과식
+	area2point += (5-overeat)*0.113;
+	if(overeat > 1) area2shortage.push("과식");
+
+	var schoolarea = (param['q13'] != undefined) ? parseInt(param['q13']) : 0;		// 학교나 학원주변
+	area2point += (5-overeat)*0.129;
+	if(schoolarea > 2) area2shortage.push("학교나 학원주변");
+
+	var eatwith = (param['q14'] != undefined) ? parseInt(param['q14']) : 0;		// 돌아다니며 식사
+	area2point += (5-eatwith)*0.084;
+	if(eatwith > 2) area2shortage.push("돌아다니며 식사");
+
+	var f2point = area2point * 100 / 4;
+
+	var area3point = 0;
+	var breakfast = (param['q15'] != undefined) ? parseInt(param['q15']) : 0;	// 아침식사
+	area3point += (breakfast-1)*0.288;
+	if(breakfast < 5) area3shortage.push("아침식사");
+
+	var foodlabel = (param['q16'] != undefined) ? parseInt(param['q16']) : 0;	// 식품표기
+	area3point += (foodlabel-1)*0.091;
+	if(foodlabel < 4) area3shortage.push("식품표기");
+
+	var handwash = (param['q17'] != undefined) ? parseInt(param['q17']) : 0;	// 손씻기
+	area3point += (handwash-1)*0.087;
+	if(handwash < 4) area3shortage.push("손씻기");
+
+	var withfamily = (param['q18'] != undefined) ? parseInt(param['q18']) : 0;	// 손씻기
+	area3point += (withfamily-1)*0.489;
+	if(withfamily < 4) area3shortage.push("가족과 식사");
+
+	var exercise = (param['q19'] != undefined) ? parseInt(param['q19']) : 0;	// 운동
+	area3point += (exercise-1)*0.045;
+	if(exercise < 5) area3shortage.push("운동");
+	var f3point = area3point * 100 / 4;
+
+	// 영양지수
+	var nutri_quot = (f1point*0.15 + f2point*0.2 + f3point*0.65).toFixed(1);	// 영역가중치
+
+	// 양양지수 점수 및 평가
+	var nutri_grade;
+	if(nutri_quot >= 70.7) nutri_grade = goodGrade;
+	else if(nutri_quot >= 53.3) nutri_grade = averageGrade;
+	else nutri_grade = badGrade;
+
+	document.getElementById('indextxt').innerHTML = "<b>"+nutri_quot+"</font>점: <font color='"+nutri_grade.backcol+"'>"+nutri_grade.stitle+"("+nutri_grade.kname+")</font></b>";+nutri_grade.stitle+"("+nutri_grade.kname+")</font>입니다.";
+	document.getElementById('fgraph').style.width = nutri_quot + "%";
+	document.getElementById('fgraph').style.background = "#832f21";
+
+	document.getElementById('fgraph_p').innerHTML = nutri_quot + "점("+nutri_grade.kname+")";
+	//document.getElementById('nutri_quot2').innerText = nutri_quot;	
+
+	//document.getElementById('nutri_result2').innerText = "식생활" + nutri_grade.stitle;
+	document.getElementById('nutri_advice2').innerHTML = nutri_grade.advice2HTML;
+	
+
+	// 영역별 점수 및 평가(상단 그래프)
+	// 균형
+	var balance_quot = f1point.toFixed(1);
+	if(balance_quot >= 52.6) balance_grade = goodGrade;
+	else if(balance_quot >= 35.1) balance_grade = averageGrade;
+	else balance_grade = badGrade;
+
+	document.getElementById('nutri_balance1').innerHTML = get_area1bar(balance_quot, balance_grade);
+	console.log("균형 : "+balance_quot+"("+balance_grade.kname+")");
+
+	// 절제
+	var restraint_quot = f2point.toFixed(1);
+	if(restraint_quot >= 66.8) restraint_grade = goodGrade;
+	else if(restraint_quot >= 50) restraint_grade = averageGrade;
+	else restraint_grade = badGrade;
+
+	document.getElementById('nutri_restraint1').innerHTML = get_area1bar(restraint_quot, restraint_grade);
+
+	// 실천
+	var action_quot = f3point.toFixed(1);
+	if(action_quot >= 80) action_grade = goodGrade;
+	else if(action_quot >= 54.5) action_grade = averageGrade;
+	else action_grade = badGrade;
+
+	document.getElementById('nutri_action1').innerHTML = get_area1bar(action_quot, action_grade);
+
+	// 영역별 점수 및 평가(중간 표)
+	document.getElementById('balance_stitle').innerText = balance_grade.stitle + "\n(" + balance_quot + ")";
+	document.getElementById('balance_desc').innerHTML = get_balanceHTML(balance_grade.kname);
+	document.getElementById('balance_descm').innerHTML = get_balanceHTML(balance_grade.kname);
+
+	document.getElementById('restraint_stitle').innerText = restraint_grade.stitle + "\n(" + restraint_quot + ")";
+	document.getElementById('restraint_desc').innerHTML = get_restraintHTML(restraint_grade.kname);
+	document.getElementById('restraint_descm').innerHTML = get_restraintHTML(restraint_grade.kname);
+
+	document.getElementById('action_stitle').innerText = action_grade.stitle + "\n(" + action_quot + ")";
+	document.getElementById('action_desc').innerHTML = get_actionHTML(action_grade.kname);
+	document.getElementById('action_descm').innerHTML = get_actionHTML(action_grade.kname);
+
+	document.getElementById('score_quot').innerHTML = "<b>- 균형 " + balance_quot + "점: <font color='"+balance_grade.backcol+"'>"+ balance_grade.stitle +"("+ balance_grade.kname +")</font><br>- 절제 " + restraint_quot + "점: <font color='"+restraint_grade.backcol+"'>"+ restraint_grade.stitle +"("+ restraint_grade.kname +")</font><br>- 실천 " + action_quot + "점: <font color='"+action_grade.backcol+"'>"+ action_grade.stitle +"("+ action_grade.kname +")</font></b>";
+	//document.getElementById('score_stitle').innerHTML = "*균형 : <font color='"+balance_grade.backcol+"'>" + balance_grade.stitle + "</font> / 절제 : <font color='"+restraint_grade.backcol+"'>" + restraint_grade.stitle + "</font> / 실천 : <font color='"+action_grade.backcol+"'>" + action_grade.stitle + "</font> 입니다.";
+
+	// 비만도(BMI)
+	var bmi = nweight / (nheight * nheight * 0.0001);
+	//alert(bmi);
+
+	// 비만여부 판정
+	var bmi_grade = get_bmiJudge(bmi, nage, gender);
+	document.getElementById('fjudge').innerHTML = bmi_grade;
+
+	// 배경 점수 표시
+	var num01 = "53.3";
+	var num02 = "70.7";
+	var num11 = "35.1";
+	var num12 = "52.6";
+	var num21 = "50.0";
+	var num22 = "66.8";
+	var num31 = "54.5";
+	var num32 = "80.0";
+
+	document.getElementById('total1').style.left = "calc("+num01+"% - 30px)";
+	document.getElementById('total2').style.left = "calc("+num02+"% - 30px)";
+	document.getElementById('balance1').style.left = "calc("+num11+"% - 30px)";
+	document.getElementById('balance1').style.left = "calc("+num11+"% - 30px)";
+	document.getElementById('balance2').style.left = "calc("+num12+"% - 30px)";
+	document.getElementById('restraint1').style.left = "calc("+num21+"% - 30px)";
+	document.getElementById('restraint2').style.left = "calc("+num22+"% - 30px)";
+	document.getElementById('action1').style.left = "calc("+num31+"% - 30px)";
+	document.getElementById('action2').style.left = "calc("+num32+"% - 30px)";
+
+	document.getElementById('total1').innerHTML = num01;
+	document.getElementById('total2').innerHTML = num02;
+	document.getElementById('balance1').innerHTML = num11;
+	document.getElementById('balance2').innerHTML = num12;
+	document.getElementById('restraint1').innerHTML = num21;
+	document.getElementById('restraint2').innerHTML = num22;
+	document.getElementById('action1').innerHTML = num31;
+	document.getElementById('action2').innerHTML = num32;
+
+	make_tpraph(num11, num12, balance_quot, num21, num22, restraint_quot, num31, num32, action_quot);
+}
+</script>
+</head>
+
+<body onload="onload_func()">
+<script type="text/javascript" src="./common/nav.js"></script>
+
+<div class="subtitle"></div>
+
+<div class="survey_topimg">
+<p><span>학령기 어린이<br class="br">(만 6~11세)</span> <br class="br2">영양지수 <br class="br">결과지</p>
+</div>
+
+<div id="contents" class="contents">
+
+<div class="result_info">
+<p>영양지수 평가 결과를 참고하여 식생활을 개선해 보세요.</p>
+</div>
+
+<div class="result_general">
+<div class="title"><p>일반 사항</p></div>
+<div class="cont">
+	<ul>
+		<li><b>나이</b> : <span id="fage"></span></li>
+		<li><b>성별</b> : <span id="fgender"></span></li>
+		<li><b>키</b> : <span id="fheight"></span></li>
+		<li><b>체중</b> : <span id="fweight"></span></li>
+		<li><b>비만도</b> : <span id="fjudge"></span></li>
+	</ul>
+</div>
+</div>
+
+<div class="result_index">
+<div class="title"><p>종합 점수</p></div>
+<div class="cont">
+<div class="indexsect">
+	<div id="indextxt" class="indextxt"></div>
+</div>
+
+<div class="result_area" style="margin-top:10px;">
+	<div class="areagraphsect">
+		<div class="areagraph">
+			<div class="areatitle">종합 점수</div>
+			<div class="areagrbar t1">
+				<div id="fgraph" class="bar">
+					<p id="fgraph_p"></p>
+				</div>			
+			</div>	
+			<div class="nutri_num">
+				<span id="total1"></span>
+				<span id="total2"></span>
+			</div>		
+		</div>
+	</div>
+</div>
+<span class="info2">* 하(< 53.3), 중(53.3 ≤ ~ < 70.7), 상(70.7 ≤)</span>
+
+</div>
+</div>
+
+<div class="result_area">
+<div class="title"><p>영역별 점수</p></div>
+<div class="cont">
+<div class="areasect">
+	<div class="areatxt"><p id="score_quot"></p></div>
+	<div class="areagraphsect">
+		<div class="areagraph">
+			<div class="areatitle">균형</div>
+			<div id="nutri_balance1" class="areagrbar n1"></div>
+			<div class="nutri_num">
+				<span id="balance1"></span>
+				<span id="balance2"></span>
+			</div>
+		</div>
+	</div>
+	<div class="areagraphsect">
+		<div class="areagraph">
+			<div class="areatitle">절제</div>
+			<div id="nutri_restraint1" class="areagrbar n2"></div>
+			<div class="nutri_num">
+				<span id="restraint1"></span>
+				<span id="restraint2"></span>
+			</div>
+		</div>
+	</div>
+	<div class="areagraphsect">
+		<div class="areagraph">
+			<div class="areatitle">실천</div>
+			<div id="nutri_action1" class="areagrbar n3"></div>
+			<div class="nutri_num">
+				<span id="action1"></span>
+				<span id="action2"></span>
+			</div>
+		</div>
+	</div>
+	<!--<span class="info2">*영역별 평가 기준: 같은 연령대의 사람들과 비교하여 점수가 75~100% 이면, <font color="green">‘양호’</font>. 25~74.9%이면 <font color="EB660A">‘개선 필요’</font>, 0~24.9%이면 <font color="red">‘개선 시급’</font>으로 표시합니다.</span>-->
+</div>
+</div>
+</div>
+
+<div class="result_pattern">
+	<div class="title"><p>영역별 점수 패턴</p></div>
+	<div class="cont">
+		<div class="trigrapesect">
+			<svg width="100%" viewBox="0 0 500 406" id="tgraph" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<g id="tgraph_back"></g>
+				<text x="248" y="20" fill="#000000" text-anchor="middle" font-size="13">균형</text>
+				<text x="25" y="375" fill="#000000" text-anchor="middle" font-size="13">절제</text>
+				<text x="470" y="375" fill="#000000" text-anchor="middle" font-size="13">실천</text>
+				<line x1="248" y1="28" x2="248" y2="264" stroke-width="1" stroke="#cccccc" />
+				<line x1="41" y1="375" x2="248" y2="264" stroke-width="1" stroke="#cccccc" />
+				<line x1="457" y1="375" x2="248" y2="264" stroke-width="1" stroke="#cccccc" />
+			</svg>
+		</div>
+		<div id="nutri_advice2" class="triadvice"></div>
+	</div>
+</div>
+
+<!-- 판정결과 Desktop -->
+<div class="tablesect">
+<table class="ret">
+<caption>영역별 판정 결과 및 권고사항</caption>
+<thead>
+	<tr><th width="110">영역</th><th width="170">판정결과</th><th colspan="2">영역별 권고 사항</th></tr>
+</thead>
+<tbody>
+<tr>
+<td valign="middle"><b>균형</b></td>
+<td id="balance_stitle" valign="middle"></td>
+<td id="balance_desc" valign="middle"></td>
+<td><img src="./images/chi_rimg1.jpg" onclick="window.open('./images/chi_rimg1.jpg','pop','width=1000,height=564');" style="cursor:pointer;" alt="균형편 이것만은 꼭! (곡류)잡곡밥 위주로 하루 2.5~3회 먹기 (고기, 생선, 달걀, 콩류) 식사 때마다 1~2가지 먹기 (채소류) 식사 때마다 3가지 이상 먹기 (과일류) 매일 1~2번 먹기 (우유, 유제품) 매일 2잔 마시기"></td>
+</tr>
+<tr>
+<td valign="middle"><b>절제</b></td>
+<td id="restraint_stitle" valign="middle"></td>
+<td id="restraint_desc" valign="middle"></td>
+<td><img src="./images/chi_rimg2.jpg" onclick="window.open('./images/chi_rimg2.jpg','pop','width=1000,height=564');" style="cursor:pointer;" alt="절제편 이것만은 꼭! 빵과 과자의 지방 함량을 확인하기, 라면 섭취 시 국물은 먹지 않기, 과식하지 않고 적당량 먹기, 당이 적은 음료 선택하기, 가공육은 적게 먹기, 위생적으로 판매하는 음식 먹기"></td>
+</tr>
+<tr>
+<td valign="middle"><b>실천</b></td>
+<td id="action_stitle" valign="middle"></td>
+<td id="action_desc" valign="middle"></td>
+<td><img src="./images/chi_rimg3.jpg" onclick="window.open('./images/chi_rimg3.jpg','pop','width=1000,height=564');" style="cursor:pointer;" alt="실천편 이것만은 꼭! 아침 꼭 먹고 가족과 함께 식사하기, 영양표시 확인하기, 올바른 손 씻기 실천하기, 규칙적으로 운동하기"></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<!-- 판정결과 Mobile -->
+<div class="tablesectm">
+	<div class="resultsectm">		
+		<div class="subtitle" style="margin-top:0;"><p>균형</p></div>
+		<dl>
+			<dt>권고 사항</dt>
+			<dd id="balance_descm"></dd>
+			<dd><img src="./images/chi_rimg1.jpg" alt="균형편 이것만은 꼭! (곡류)잡곡밥 위주로 하루 2.5~3회 먹기 (고기, 생선, 달걀, 콩류) 식사 때마다 1~2가지 먹기 (채소류) 식사 때마다 3가지 이상 먹기 (과일류) 매일 1~2번 먹기 (우유, 유제품) 매일 2잔 마시기"></dd>
+		</dl>
+
+		<div class="subtitle"><p>절제</p></div>
+		<dl>
+			<dt>권고 사항</dt>
+			<dd id="restraint_descm"></dd>
+			<dd><img src="./images/chi_rimg2.jpg" alt="절제편 이것만은 꼭! 빵과 과자의 지방 함량을 확인하기, 라면 섭취 시 국물은 먹지 않기, 과식하지 않고 적당량 먹기, 당이 적은 음료 선택하기, 가공육은 적게 먹기, 위생적으로 판매하는 음식 먹기"></dd>
+		</dl>
+
+		<div class="subtitle"><p>실천</p></div>
+		<dl>
+			<dt>권고 사항</dt>
+			<dd id="action_descm"></dd>
+			<dd><img src="./images/chi_rimg3.jpg" alt="실천편 이것만은 꼭! 아침 꼭 먹고 가족과 함께 식사하기, 영양표시 확인하기, 올바른 손 씻기 실천하기, 규칙적으로 운동하기"></dd>
+		</dl>
+	</div>
+</div>
+
+</div>
+</div>
+<div class="strbtn" style="user-select: auto;"><a href="right-sidebar.html" style="user-select: auto;"><p style="user-select: auto;">나의 영양지수 다시 검사하기</p></a></div>
+    </div>
+    <div class="topbtn"><a href="javascript:window.scrollTo(0,0);"><img src="{% static 'images/top_btn.png' %}" alt="위로 가기 버튼" width="100" height="100"></a></div>
+
+<script> 
+(function(){
+	$(".topnav > li").bind("mouseenter focusin", function() {
+		$(this).addClass("on").siblings().removeClass("on");
+	});
+	$(".topnav > li").bind("mouseleave focusout", function() {
+		$(this).removeClass("on");
+	});
+})(); 
+</script>
+
+</body>
+</html>
